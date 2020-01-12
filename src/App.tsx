@@ -1,26 +1,41 @@
 import React from 'react';
-import logo from './logo.svg';
+import { Container } from 'react-bootstrap';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+
+import routes from './routes';
+
 import './App.css';
+
+import './styles/bootstrap.scss';
 
 const App: React.FC = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+        <div>
+            This is the background
+            <div className="main-wrapper">
+                <Container>
+                    <Switch>
+                        {routes.map((route, i) => (
+                            <RouteWithSubRoutes key={i} {...route} />
+                        ))}
+                    </Switch>
+                </Container>
+            </div>
+        </div>
+    </Router>
   );
 }
+
+function RouteWithSubRoutes(route: any) {
+    return (
+      <Route
+        path={route.path}
+        render={props => (
+          <route.component {...props} routes={route.routes} />
+        )}
+      />
+    );
+  }
 
 export default App;
