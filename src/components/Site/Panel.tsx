@@ -1,6 +1,10 @@
 import React, { Component, ReactElement, ReactNodeArray } from 'react';
 import classNames from 'classnames';
 
+import './Panel.scss';
+import { Card } from 'react-bootstrap';
+import { readlink } from 'fs';
+
 enum PanelType {
     Default = 'default',
     Primary = 'primary',
@@ -26,17 +30,46 @@ class Panel extends Component<PanelProps, {}> {
     static defaultProps = defaultProps;
 
     render(): ReactElement {
+        let type:
+        | 'primary'
+        | 'secondary'
+        | 'success'
+        | 'danger'
+        | 'warning'
+        | 'info'
+        | 'dark'
+        | 'light';
+
+        switch(this.props.type) {
+            case PanelType.Primary:
+                type = 'primary';
+                break;
+            case PanelType.Default:
+                type = 'secondary';
+                break;
+            case PanelType.Info:
+                type = 'info';
+                break;
+            case PanelType.Warning:
+                type = 'warning';
+                break;
+            case PanelType.Danger:
+                type = 'danger';
+                break;
+            default:
+                type = 'primary';
+                break;
+        }
+
         return (
-            <div className={ classNames('panel', `panel-${this.props.type}`, this.props.className) }>
-                { this.props.title &&
-                    <div className={ classNames('panel-heading', this.props.titleClass) }>
-                        { this.props.title }
-                    </div>
-                }
-                <div className='panel-body'>
-                    { this.props.children }
-                </div>
-            </div>);
+            <Card border={type} bg='dark'>
+            <Card.Header>{this.props.title}</Card.Header>
+            <Card.Body>
+              <Card.Text>
+                {this.props.children}
+              </Card.Text>
+            </Card.Body>
+          </Card>);
     }
 }
 
