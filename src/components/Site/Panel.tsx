@@ -1,9 +1,7 @@
 import React, { Component, ReactElement, ReactNodeArray } from 'react';
-import classNames from 'classnames';
 
 import './Panel.scss';
 import { Card } from 'react-bootstrap';
-import { readlink } from 'fs';
 
 enum PanelType {
     Default = 'default',
@@ -31,14 +29,14 @@ class Panel extends Component<PanelProps, {}> {
 
     render(): ReactElement {
         let type:
-        | 'primary'
-        | 'secondary'
-        | 'success'
-        | 'danger'
-        | 'warning'
-        | 'info'
-        | 'dark'
-        | 'light';
+            | 'primary'
+            | 'secondary'
+            | 'success'
+            | 'danger'
+            | 'warning'
+            | 'info'
+            | 'dark'
+            | 'light';
 
         switch(this.props.type) {
             case PanelType.Primary:
@@ -62,14 +60,12 @@ class Panel extends Component<PanelProps, {}> {
         }
 
         return (
-            <Card border={type} bg='dark'>
-            <Card.Header>{this.props.title}</Card.Header>
-            <Card.Body>
-              <Card.Text>
-                {this.props.children}
-              </Card.Text>
-            </Card.Body>
-          </Card>);
+            <Card border={ type } bg='dark'>
+                <Card.Header className='text-center'>{ this.props.title }</Card.Header>
+                <Card.Body>
+                    { this.props.children }
+                </Card.Body>
+            </Card>);
     }
 }
 

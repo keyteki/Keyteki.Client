@@ -4,12 +4,12 @@
 
 .card {
     font-family: Keyforge;
-    
     box-shadow: 3px 3px 5px theme-color('primary');
     
     .card-header {
         font-weight: normal;
         background-size: cover;
+        color: theme-color('light')
     }
 
     &.border-primary {
