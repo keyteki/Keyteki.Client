@@ -1,0 +1,18 @@
+@import 'styles/colours';
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+
+body {
+    height: 100%;
+}
+
+a {
+    color: theme-color("secondary");
+
+    &:hover {
+      color: theme-color("info");
+      text-decoration: none;
+    }
+
+    text-decoration: none;
+}

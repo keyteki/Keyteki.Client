@@ -1,19 +1,19 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { Container } from 'react-bootstrap';
+import Navigation from './components/Site/Navigation';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
-import routes from './routes';
+import routes, { RouteEntry } from './routes';
 
-import './App.css';
-
+import './App.scss';
 import './styles/bootstrap.scss';
 
 const App: React.FC = () => {
   return (
     <Router>
         <div>
-            This is the background
-            <div className="main-wrapper">
+            <Navigation appName='The Crucible Online' />
+            <div className='main-wrapper'>
                 <Container>
                     <Switch>
                         {routes.map((route, i) => (
@@ -27,15 +27,16 @@ const App: React.FC = () => {
   );
 }
 
-function RouteWithSubRoutes(route: any) {
+function RouteWithSubRoutes(route: RouteEntry): ReactElement {
     return (
-      <Route
-        path={route.path}
-        render={props => (
-          <route.component {...props} routes={route.routes} />
-        )}
-      />
+        <Route
+            exact={route.exact}
+            path={route.path}
+            render={(props): ReactElement => (
+                <route.component {...props} routes={route.routes} />
+            )}
+        />
     );
-  }
+}
 
 export default App;

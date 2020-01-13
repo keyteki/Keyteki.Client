@@ -1,0 +1,10 @@
+@import '../../styles/colours';
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+@import '~bootstrap/scss/mixins';
+
+.navbar-brand {
+    a {
+        color: gray('500');
+    }
+}
