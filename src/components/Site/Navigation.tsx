@@ -13,18 +13,26 @@ interface NavigationProps {
 class Navigation extends Component<NavigationProps, {}> {
     render(): ReactElement {
         const navLinks = RightMenu.map(menuItem => {
-            return <LinkContainer key={menuItem.path} to={menuItem.path}><Nav.Link>{menuItem.title}</Nav.Link></LinkContainer>
+            return (
+                <LinkContainer key={menuItem.path} to={menuItem.path}>
+                    <Nav.Link>{menuItem.title}</Nav.Link>
+                </LinkContainer>
+            );
         });
 
-        return <Navbar bg='dark' variant='dark'>
-            <Navbar.Brand><Link to='/'>{this.props.appName || 'Gameteki Application'}</Link></Navbar.Brand>
-            <Navbar.Toggle aria-controls="navbar" />
-            <Navbar.Collapse id="navbar" className="justify-content-end">
-                <Nav className="ml-auto">
-                    {navLinks}
-                </Nav>
-              </Navbar.Collapse>
-        </Navbar>
+        return (
+            <Navbar bg='dark' variant='dark'>
+                <Navbar.Brand>
+                    <Link to='/'>
+                        {this.props.appName || 'Gameteki Application'}
+                    </Link>
+                </Navbar.Brand>
+                <Navbar.Toggle aria-controls='navbar' />
+                <Navbar.Collapse id='navbar' className='justify-content-end'>
+                    <Nav className='ml-auto'>{navLinks}</Nav>
+                </Navbar.Collapse>
+            </Navbar>
+        );
     }
 }
 

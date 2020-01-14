@@ -9,23 +9,23 @@ import './App.scss';
 import './styles/bootstrap.scss';
 
 const App: React.FC = () => {
-  return (
-    <Router>
-        <div>
-            <Navigation appName='The Crucible Online' />
-            <div className='main-wrapper'>
-                <Container>
-                    <Switch>
-                        {routes.map((route, i) => (
-                            <RouteWithSubRoutes key={i} {...route} />
-                        ))}
-                    </Switch>
-                </Container>
+    return (
+        <Router>
+            <div>
+                <Navigation appName='The Crucible Online' />
+                <div className='main-wrapper'>
+                    <Container>
+                        <Switch>
+                            {routes.map((route, i) => (
+                                <RouteWithSubRoutes key={i} {...route} />
+                            ))}
+                        </Switch>
+                    </Container>
+                </div>
             </div>
-        </div>
-    </Router>
-  );
-}
+        </Router>
+    );
+};
 
 function RouteWithSubRoutes(route: RouteEntry): ReactElement {
     return (

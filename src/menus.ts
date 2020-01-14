@@ -5,6 +5,5 @@ export interface MenuItem {
 
 export const RightMenu = [
     { path: '/login', title: 'Login' },
-    { path: '/register', title: 'Register' },
+    { path: '/register', title: 'Register' }
 ];
-

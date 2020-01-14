@@ -16,13 +16,13 @@ type PanelProps = {
     className?: string;
     title?: string;
     titleClass?: string;
-} & Partial<DefaultProps>
+} & Partial<DefaultProps>;
 
 const defaultProps = {
     type: PanelType.Primary
-}
+};
 
-type DefaultProps = Readonly<typeof defaultProps>
+type DefaultProps = Readonly<typeof defaultProps>;
 
 class Panel extends Component<PanelProps, {}> {
     static defaultProps = defaultProps;
@@ -38,7 +38,7 @@ class Panel extends Component<PanelProps, {}> {
             | 'dark'
             | 'light';
 
-        switch(this.props.type) {
+        switch (this.props.type) {
             case PanelType.Primary:
                 type = 'primary';
                 break;
@@ -60,12 +60,13 @@ class Panel extends Component<PanelProps, {}> {
         }
 
         return (
-            <Card border={ type } bg='dark'>
-                <Card.Header className='text-center'>{ this.props.title }</Card.Header>
-                <Card.Body>
-                    { this.props.children }
-                </Card.Body>
-            </Card>);
+            <Card border={type} bg='dark'>
+                <Card.Header className='text-center'>
+                    {this.props.title}
+                </Card.Header>
+                <Card.Body>{this.props.children}</Card.Body>
+            </Card>
+        );
     }
 }
 
