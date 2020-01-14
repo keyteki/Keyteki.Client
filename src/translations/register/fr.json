@@ -1,4 +1,8 @@
 {
+    "Enter a username": "Entrer un nom d'utilisateur",
+    "Enter a password": "Entrer un mot de passe",
+    "Enter an email address": "Entrer une adresse mail",
+    "Enter the same password": "Entrer à nouveau votre mot de passe",
     "Register": "S'inscrire",
     "Register an account": "Créer un compte",
     "privacy": "We require information from you in order to service your access to the site.  Please see the <1>privacy policy</1> for details on why we need this information and what we do with it.  Please pay particular attention to the section on avatars."

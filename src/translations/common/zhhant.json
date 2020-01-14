@@ -1,10 +1,6 @@
 {
-    "Email Address": "Email Address",
-    "Enter a username": "Enter a username",
-    "Enter a password": "Enter a password",
-    "Enter an email address": "Enter an email address",
-    "Enter the same password": "Enter the same password",
-    "Password": "Password",
-    "Password (again)": "Password (again)",
-    "Username": "Username"
+    "Email": "電子郵件信箱",
+    "Password": "密碼",
+    "Password (again)": "密碼 (再次輸入)",
+    "Username": "使用者名稱"
 }
