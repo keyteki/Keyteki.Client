@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 import { Container } from 'react-bootstrap';
-import Navigation from './components/Site/Navigation';
+import Navigation from './components/Navigation/Navigation';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import routes, { RouteEntry } from './routes';
@@ -32,9 +32,7 @@ function RouteWithSubRoutes(route: RouteEntry): ReactElement {
         <Route
             exact={route.exact}
             path={route.path}
-            render={(props): ReactElement => (
-                <route.component {...props} routes={route.routes} />
-            )}
+            render={(props): ReactElement => <route.component {...props} routes={route.routes} />}
         />
     );
 }
