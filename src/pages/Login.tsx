@@ -11,17 +11,11 @@ const Login: React.FC = () => {
                     <Form.Row>
                         <Form.Group as={Col} controlId='formGridUsername'>
                             <Form.Label>Username</Form.Label>
-                            <Form.Control
-                                type='text'
-                                placeholder='Enter your username'
-                            />
+                            <Form.Control type='text' placeholder='Enter your username' />
                         </Form.Group>
                         <Form.Group as={Col} controlId='formGridPassword'>
                             <Form.Label>Password</Form.Label>
-                            <Form.Control
-                                type='password'
-                                placeholder='Enter your password'
-                            />
+                            <Form.Control type='password' placeholder='Enter your password' />
                         </Form.Group>
                     </Form.Row>
 
