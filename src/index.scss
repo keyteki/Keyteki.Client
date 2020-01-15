@@ -17,3 +17,43 @@ a {
 
     text-decoration: none;
 }
+
+.btn {
+    width: 126px;
+    background-position: center;
+    background-repeat: no-repeat;
+    border: none;
+    background-color: transparent;
+    font-family: Keyforge, Helvetica, sans-serif;
+
+    &:hover {
+        text-shadow: 0px 0px 6px theme-color('white');
+        transition: all 0.4s ease 0s;
+
+        background-color: transparent;
+    }
+
+    &:focus {
+        background-color: transparent;
+    }
+
+    &:active {
+        background-color: transparent;
+    }
+
+    &:focus:active {
+        background-color: transparent;
+    }
+}
+
+.btn-primary {
+    background-image: url('./img/button-purple.png');
+
+    &:hover {
+        background-image: url('./img/button-purple-hover.png');
+    }
+
+    &:focus:active {
+        background-image: url('./img/button-purple-hover.png');
+    }
+}
