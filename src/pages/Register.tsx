@@ -8,24 +8,48 @@ import * as yup from 'yup';
 import Panel from '../components/Site/Panel';
 
 interface RegisterDetails {
-    username?: string;
-    email?: string;
-    password?: string;
-    passwordAgain?: string;
+    username: string;
+    email: string;
+    password: string;
+    passwordAgain: string;
 }
 
-const schema = yup.object({
-    username: yup.string().required(),
-    email: yup
-        .string()
-        .email()
-        .required(),
-    password: yup.string().required(),
-    passwordAgain: yup.string().required()
-});
+const initialValues = {
+    username: '',
+    email: '',
+    password: '',
+    passwordAgain: ''
+};
 
 const Register: React.FC = () => {
     const { t } = useTranslation('register');
+
+    const schema = yup.object({
+        username: yup
+            .string()
+            .required(t('You must specify a username'))
+            .min(3, t('Username must be at least 3 characters and no more than 15 characters long'))
+            .max(
+                15,
+                t('Username must be at least 3 characters and no more than 15 characters long')
+            )
+            .matches(
+                /^[A-Za-z0-9_-]+$/,
+                t('Usernames must only use the characters a-z, 0-9, _ and -')
+            ),
+        email: yup
+            .string()
+            .email()
+            .required(t('You must specify an email address')),
+        password: yup
+            .string()
+            .min(6, t('Password must be at least 6 characters'))
+            .required(t('You must specify a password')),
+        passwordAgain: yup
+            .string()
+            .required()
+            .oneOf([yup.ref('password'), null], t('The passwords you have entered do not match'))
+    });
 
     return (
         <Col lg={{ span: 10, offset: 1 }}>
@@ -37,16 +61,20 @@ const Register: React.FC = () => {
                         we need this information and what we do with it.
                     </Trans>
                 </p>
-                <Formik validationSchema={schema} onSubmit={console.log} initialValues={{}}>
+                <Formik
+                    validationSchema={schema}
+                    onSubmit={console.log}
+                    initialValues={initialValues}
+                >
                     {(props: FormikProps<RegisterDetails>): ReactElement => (
                         <Form>
                             <Form.Row>
                                 <Form.Group as={Col} md='6' controlId='formGridUsername'>
                                     <Form.Label>{t('Username')}</Form.Label>
                                     <Form.Control
+                                        name='username'
                                         type='text'
                                         placeholder={t('Enter a username')}
-                                        name='username'
                                         value={props.values.username}
                                         onChange={props.handleChange}
                                         onBlur={props.handleBlur}
@@ -61,9 +89,9 @@ const Register: React.FC = () => {
                                 <Form.Group as={Col} md='6' controlId='formGridEmail'>
                                     <Form.Label>{t('Email')}</Form.Label>
                                     <Form.Control
+                                        name='email'
                                         type='email'
                                         placeholder={t('Enter an email address')}
-                                        name='email'
                                         value={props.values.email}
                                         onChange={props.handleChange}
                                         onBlur={props.handleBlur}
@@ -78,6 +106,7 @@ const Register: React.FC = () => {
                                 <Form.Group as={Col} md='6' controlId='formGridPassword'>
                                     <Form.Label>{t('Password')}</Form.Label>
                                     <Form.Control
+                                        name='password'
                                         type='password'
                                         placeholder={t('Enter a password')}
                                         value={props.values.password}
@@ -94,8 +123,16 @@ const Register: React.FC = () => {
                                 <Form.Group as={Col} md='6' controlId='formGridPassword1'>
                                     <Form.Label>{t('Password (again)')}</Form.Label>
                                     <Form.Control
+                                        name='passwordAgain'
                                         type='password'
                                         placeholder={t('Enter the same password')}
+                                        value={props.values.passwordAgain}
+                                        onChange={props.handleChange}
+                                        onBlur={props.handleBlur}
+                                        isInvalid={
+                                            props.touched.passwordAgain &&
+                                            !!props.errors.passwordAgain
+                                        }
                                     />
                                     <Form.Control.Feedback type='invalid'>
                                         {props.errors.passwordAgain}
