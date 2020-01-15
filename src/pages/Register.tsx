@@ -49,7 +49,10 @@ const Register: React.FC = () => {
                                         name='username'
                                         value={props.values.username}
                                         onChange={props.handleChange}
-                                        isInvalid={!!props.errors.username}
+                                        onBlur={props.handleBlur}
+                                        isInvalid={
+                                            props.touched.username && !!props.errors.username
+                                        }
                                     />
                                     <Form.Control.Feedback type='invalid'>
                                         {props.errors.username}
@@ -63,20 +66,26 @@ const Register: React.FC = () => {
                                         name='email'
                                         value={props.values.email}
                                         onChange={props.handleChange}
-                                        isInvalid={!!props.errors.email}
+                                        onBlur={props.handleBlur}
+                                        isInvalid={props.touched.email && !!props.errors.email}
                                     />
                                     <Form.Control.Feedback type='invalid'>
                                         {props.errors.email}
                                     </Form.Control.Feedback>
                                 </Form.Group>
                             </Form.Row>
-
                             <Form.Row>
                                 <Form.Group as={Col} md='6' controlId='formGridPassword'>
                                     <Form.Label>{t('Password')}</Form.Label>
                                     <Form.Control
                                         type='password'
                                         placeholder={t('Enter a password')}
+                                        value={props.values.password}
+                                        onChange={props.handleChange}
+                                        onBlur={props.handleBlur}
+                                        isInvalid={
+                                            props.touched.password && !!props.errors.password
+                                        }
                                     />
                                     <Form.Control.Feedback type='invalid'>
                                         {props.errors.password}

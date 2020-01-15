@@ -61,9 +61,7 @@ class Panel extends Component<PanelProps, {}> {
 
         return (
             <Card border={type} bg='dark'>
-                <Card.Header className='text-center'>
-                    {this.props.title}
-                </Card.Header>
+                <Card.Header className='text-center'>{this.props.title}</Card.Header>
                 <Card.Body>{this.props.children}</Card.Body>
             </Card>
         );
