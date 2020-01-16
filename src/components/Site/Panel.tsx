@@ -1,4 +1,4 @@
-import React, { Component, ReactElement, ReactNodeArray } from 'react';
+import React, { ReactNodeArray, ReactNode } from 'react';
 
 import './Panel.scss';
 import { Card } from 'react-bootstrap';
@@ -12,7 +12,7 @@ enum PanelType {
 }
 
 type PanelProps = {
-    children?: Node | ReactNodeArray;
+    children?: ReactNode | ReactNodeArray;
     className?: string;
     title?: string;
     titleClass?: string;
@@ -24,48 +24,44 @@ const defaultProps = {
 
 type DefaultProps = Readonly<typeof defaultProps>;
 
-class Panel extends Component<PanelProps, {}> {
-    static defaultProps = defaultProps;
+const Panel: React.FC<PanelProps> = props => {
+    let type:
+        | 'primary'
+        | 'secondary'
+        | 'success'
+        | 'danger'
+        | 'warning'
+        | 'info'
+        | 'dark'
+        | 'light';
 
-    render(): ReactElement {
-        let type:
-            | 'primary'
-            | 'secondary'
-            | 'success'
-            | 'danger'
-            | 'warning'
-            | 'info'
-            | 'dark'
-            | 'light';
-
-        switch (this.props.type) {
-            case PanelType.Primary:
-                type = 'primary';
-                break;
-            case PanelType.Default:
-                type = 'secondary';
-                break;
-            case PanelType.Info:
-                type = 'info';
-                break;
-            case PanelType.Warning:
-                type = 'warning';
-                break;
-            case PanelType.Danger:
-                type = 'danger';
-                break;
-            default:
-                type = 'primary';
-                break;
-        }
-
-        return (
-            <Card border={type} bg='dark'>
-                <Card.Header className='text-center'>{this.props.title}</Card.Header>
-                <Card.Body>{this.props.children}</Card.Body>
-            </Card>
-        );
+    switch (props.type) {
+        case PanelType.Primary:
+            type = 'primary';
+            break;
+        case PanelType.Default:
+            type = 'secondary';
+            break;
+        case PanelType.Info:
+            type = 'info';
+            break;
+        case PanelType.Warning:
+            type = 'warning';
+            break;
+        case PanelType.Danger:
+            type = 'danger';
+            break;
+        default:
+            type = 'primary';
+            break;
     }
-}
+
+    return (
+        <Card border={type} bg='dark'>
+            <Card.Header className='text-center'>{props.title}</Card.Header>
+            <Card.Body>{props.children}</Card.Body>
+        </Card>
+    );
+};
 
 export default Panel;

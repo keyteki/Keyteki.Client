@@ -15,4 +15,6 @@ const enhancer = composeEnhancers(applyMiddleware(thunk, callApi));
 const initialState = {};
 const store = createStore(rootReducer, initialState, enhancer);
 
+export type RootState = ReturnType<typeof rootReducer>;
+
 export default store;

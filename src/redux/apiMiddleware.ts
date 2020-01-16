@@ -1,5 +1,6 @@
-import axios, { AxiosRequestConfig } from 'axios';
+import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 import { Dispatch, MiddlewareAPI, AnyAction } from 'redux';
+import { ApiType } from './types/api';
 
 export interface ApiAction {
     type: string;
@@ -46,7 +47,7 @@ export default function callApiMiddleware({ dispatch, getState }: MiddlewareAPI)
 
         dispatch(
             Object.assign({}, payload, {
-                type: 'API_LOADING',
+                type: ApiType.ApiLoading,
                 request: requestType
             })
         );
@@ -63,35 +64,40 @@ export default function callApiMiddleware({ dispatch, getState }: MiddlewareAPI)
         try {
             response = await axios(params);
         } catch (error) {
-            if (error.status === 401) {
-                const state = getState();
-                const authResponse = await axios({
-                    url: '/api/account/token',
-                    method: 'post',
-                    data: { token: state.auth.refreshToken }
-                });
+            const axiosError = error as AxiosError;
 
-                if (authResponse.status !== 200) {
-                    //  dispatch(navigate('/login'));
+            if (axiosError && axiosError.response) {
+                response = axiosError.response;
+                if (response.status === 401) {
+                    const state = getState();
+                    const authResponse = await axios({
+                        url: '/api/account/token',
+                        method: 'post',
+                        data: { token: state.auth.refreshToken }
+                    });
 
-                    return next(action);
+                    if (authResponse.status !== 200) {
+                        //  dispatch(navigate('/login'));
+
+                        return next(action);
+                    }
+
+                    // dispatch(setAuthTokens(authResponse.token, state.auth.refreshToken));
+                    // dispatch(authenticateSocket());
+
+                    params.headers = {
+                        'content-type': 'application/json'
+                        //Authorization: `Bearer ${authResponse.token}`
+                    };
+
+                    try {
+                        response = await axios(params);
+                    } catch (innerError) {
+                        errorStatus = innerError.status;
+                    }
+                } else {
+                    errorStatus = response.status;
                 }
-
-                // dispatch(setAuthTokens(authResponse.token, state.auth.refreshToken));
-                // dispatch(authenticateSocket());
-
-                params.headers = {
-                    'content-type': 'application/json'
-                    //Authorization: `Bearer ${authResponse.token}`
-                };
-
-                try {
-                    response = await axios(params);
-                } catch (innerError) {
-                    errorStatus = innerError.status;
-                }
-            } else {
-                errorStatus = error.status;
             }
         }
 
@@ -101,7 +107,7 @@ export default function callApiMiddleware({ dispatch, getState }: MiddlewareAPI)
                     status: errorStatus,
                     message:
                         'An error occured communicating with the server.  Please try again later.',
-                    type: 'API_FAILURE',
+                    type: ApiType.ApiFailure,
                     request: requestType
                 })
             );
@@ -113,8 +119,8 @@ export default function callApiMiddleware({ dispatch, getState }: MiddlewareAPI)
             dispatch(
                 Object.assign({}, payload, {
                     status: response.status,
-                    message: response.statusText,
-                    type: 'API_FAILURE',
+                    message: response.data || response.statusText,
+                    type: ApiType.ApiFailure,
                     request: requestType
                 })
             );
@@ -131,7 +137,7 @@ export default function callApiMiddleware({ dispatch, getState }: MiddlewareAPI)
 
         return dispatch(
             Object.assign({}, payload, {
-                type: 'API_LOADED',
+                type: ApiType.ApiLoaded,
                 request: requestType
             })
         );
