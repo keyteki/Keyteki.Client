@@ -1,5 +1,5 @@
 import Login from './pages/Login';
-import Register from './pages/Register';
+import Register from './pages/containers/Register';
 import Lobby from './pages/Lobby';
 import React from 'react';
 
@@ -10,7 +10,7 @@ export interface RoutedProps {
 export interface RouteEntry {
     exact?: boolean;
     path: string;
-    component: React.FC<RoutedProps>;
+    component: React.FC<RoutedProps | {}>;
     routes?: RouteEntry[];
 }
 

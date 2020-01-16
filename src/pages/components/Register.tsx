@@ -5,7 +5,7 @@ import { useTranslation, Trans } from 'react-i18next';
 import { Formik, FormikProps } from 'formik';
 import * as yup from 'yup';
 
-import Panel from '../components/Site/Panel';
+import Panel from '../../components/Site/Panel';
 
 interface RegisterDetails {
     username: string;
@@ -14,6 +14,10 @@ interface RegisterDetails {
     passwordAgain: string;
 }
 
+export type RegisterProps = {
+    onSubmit: (values: RegisterDetails) => void;
+};
+
 const initialValues = {
     username: '',
     email: '',
@@ -21,7 +25,7 @@ const initialValues = {
     passwordAgain: ''
 };
 
-const Register: React.FC = () => {
+const Register: React.FC<RegisterProps> = props => {
     const { t } = useTranslation('register');
 
     const schema = yup.object({
@@ -39,7 +43,7 @@ const Register: React.FC = () => {
             ),
         email: yup
             .string()
-            .email()
+            .email(t('Please enter a valid email address'))
             .required(t('You must specify an email address')),
         password: yup
             .string()
@@ -47,7 +51,7 @@ const Register: React.FC = () => {
             .required(t('You must specify a password')),
         passwordAgain: yup
             .string()
-            .required()
+            .required(t('You must confirm your password'))
             .oneOf([yup.ref('password'), null], t('The passwords you have entered do not match'))
     });
 
@@ -63,11 +67,16 @@ const Register: React.FC = () => {
                 </p>
                 <Formik
                     validationSchema={schema}
-                    onSubmit={console.log}
+                    onSubmit={props.onSubmit}
                     initialValues={initialValues}
                 >
                     {(props: FormikProps<RegisterDetails>): ReactElement => (
-                        <Form>
+                        <Form
+                            onSubmit={(event: React.FormEvent<HTMLFormElement>): void => {
+                                event.preventDefault();
+                                props.handleSubmit(event);
+                            }}
+                        >
                             <Form.Row>
                                 <Form.Group as={Col} md='6' controlId='formGridUsername'>
                                     <Form.Label>{t('Username')}</Form.Label>
@@ -141,7 +150,7 @@ const Register: React.FC = () => {
                             </Form.Row>
 
                             <div className='text-center'>
-                                <Button variant='primary' type='button'>
+                                <Button variant='primary' type='submit'>
                                     {t('Register')}
                                 </Button>
                             </div>

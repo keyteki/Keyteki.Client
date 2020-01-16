@@ -1,12 +1,21 @@
-import { setAuthTokens, authenticateSocket } from './actions';
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
+import { Dispatch, MiddlewareAPI, AnyAction } from 'redux';
 
-export default function callAPIMiddleware({ dispatch, getState }) {
-    return next => async action => {
+export interface ApiAction {
+    type: string;
+    types: [string, string];
+    apiParams: AxiosRequestConfig;
+    shouldCallApi: (_: object) => boolean;
+    payload?: {};
+    skipAuth?: boolean;
+}
+
+export default function callApiMiddleware({ dispatch, getState }: MiddlewareAPI) {
+    return (next: Dispatch) => async (action: AnyAction | ApiAction): Promise<{}> => {
         const {
             types,
-            APIParams,
-            shouldCallAPI = () => true,
+            apiParams,
+            shouldCallApi = (): boolean => true,
             payload = {},
             skipAuth = false
         } = action;
@@ -31,8 +40,8 @@ export default function callAPIMiddleware({ dispatch, getState }) {
             })
         );
 
-        if (!shouldCallAPI(getState())) {
-            return;
+        if (!shouldCallApi(getState())) {
+            return next(action);
         }
 
         dispatch(
@@ -42,43 +51,42 @@ export default function callAPIMiddleware({ dispatch, getState }) {
             })
         );
 
-        const apiParams = APIParams || {};
-        apiParams.contentType = 'application/json';
+        const params: AxiosRequestConfig = apiParams || {};
+        params.headers = { 'content-type': 'application/json' };
         if (!skipAuth) {
-            apiParams.headers = {
-                Authorization: `Bearer ${getState().auth.token}`
-            };
+            params.headers.Authorization = `Bearer ${getState().auth.token}`;
         }
 
         let response;
         let errorStatus = 200;
 
         try {
-            response = await $.ajax(apiParams.url, apiParams);
+            response = await axios(params);
         } catch (error) {
             if (error.status === 401) {
                 const state = getState();
-                const authResponse = await $.ajax('/api/account/token', {
-                    contentType: 'application/json',
-                    type: 'POST',
-                    data: JSON.stringify({ token: state.auth.refreshToken })
+                const authResponse = await axios({
+                    url: '/api/account/token',
+                    method: 'post',
+                    data: { token: state.auth.refreshToken }
                 });
 
-                if (!authResponse.success) {
-                    dispatch(navigate('/login'));
+                if (authResponse.status !== 200) {
+                    //  dispatch(navigate('/login'));
 
-                    return;
+                    return next(action);
                 }
 
-                dispatch(setAuthTokens(authResponse.token, state.auth.refreshToken));
-                dispatch(authenticateSocket());
+                // dispatch(setAuthTokens(authResponse.token, state.auth.refreshToken));
+                // dispatch(authenticateSocket());
 
-                apiParams.headers = {
-                    Authorization: `Bearer ${authResponse.token}`
+                params.headers = {
+                    'content-type': 'application/json'
+                    //Authorization: `Bearer ${authResponse.token}`
                 };
 
                 try {
-                    response = await $.ajax(apiParams.url, apiParams);
+                    response = await axios(params);
                 } catch (innerError) {
                     errorStatus = innerError.status;
                 }
@@ -93,35 +101,25 @@ export default function callAPIMiddleware({ dispatch, getState }) {
                     status: errorStatus,
                     message:
                         'An error occured communicating with the server.  Please try again later.',
-                    type: 'API_LOADED',
-                    request: requestType
-                })
-            );
-
-            dispatch(
-                Object.assign({}, payload, {
-                    status: errorStatus,
-                    message:
-                        'An error occured communicating with the server.  Please try again later.',
                     type: 'API_FAILURE',
                     request: requestType
                 })
             );
 
-            return;
+            return next(action);
         }
 
-        if (!response.success) {
+        if (response.status !== 200) {
             dispatch(
                 Object.assign({}, payload, {
-                    status: 200,
-                    message: response.message,
+                    status: response.status,
+                    message: response.statusText,
                     type: 'API_FAILURE',
                     request: requestType
                 })
             );
 
-            return;
+            return next(action);
         }
 
         dispatch(
@@ -131,7 +129,7 @@ export default function callAPIMiddleware({ dispatch, getState }) {
             })
         );
 
-        dispatch(
+        return dispatch(
             Object.assign({}, payload, {
                 type: 'API_LOADED',
                 request: requestType
