@@ -131,6 +131,8 @@ export default function callApiMiddleware({ dispatch, getState }: MiddlewareAPI)
         return dispatch(
             Object.assign({}, payload, {
                 type: ApiType.ApiLoaded,
+                success: response.data.success,
+                message: response.data.message,
                 request: requestType
             })
         );

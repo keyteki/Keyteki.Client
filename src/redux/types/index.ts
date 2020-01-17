@@ -1,4 +1,4 @@
 import { ApiType } from './api';
-import { RegisterType } from './register';
+import { RegisterAction } from './register';
 
-export type ReduxType = ApiType | RegisterType;
+export type ReduxType = ApiType | RegisterAction;

@@ -9,14 +9,14 @@ import { ApiAction } from '../../redux/apiMiddleware';
 import Panel from '../../components/Site/Panel';
 import ApiStatus from '../../components/Site/ApiStatus';
 import { ApiState } from '../../redux/types/api';
-import { RegisterType } from '../../redux/types/register';
+import { RegisterAction } from '../../redux/types/register';
 import { RootState } from '../../redux/store';
 
 const RegisterContainer: React.FC = () => {
     const dispatch = useDispatch();
     const { t } = useTranslation('register');
     const apiState = useSelector<RootState, ApiState | undefined>(
-        state => state.api[RegisterType.RegisterAccount]
+        state => state.api[RegisterAction.RegisterAccount]
     );
 
     return (

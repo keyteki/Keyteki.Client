@@ -4,7 +4,7 @@ export type RegisterUser = {
     email: string;
 };
 
-export enum RegisterType {
+export enum RegisterAction {
     RegisterAccount = 'REGISTER_ACCOUNT',
     AccountRegisteted = 'ACCOUNT_REGISTERED'
 }
