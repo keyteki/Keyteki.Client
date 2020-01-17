@@ -1,22 +1,30 @@
-import { ApiType, ApiFailureAction, ApiStateDictionary, ApiState } from '../types/api';
+import { ApiActionType, ApiStateDictionary, ApiAction } from '../types';
 
 const initialState: ApiStateDictionary = {};
 
 export default function(
     state: ApiStateDictionary = initialState,
-    action: ApiFailureAction
+    action: ApiAction
 ): ApiStateDictionary {
     const retState = {
         ...state
     };
 
-    const apiState: ApiState = {};
+    const apiState: ApiAction = {};
 
     switch (action.type) {
-        case ApiType.ApiFailure:
+        case ApiActionType.ApiFailure:
+            apiState.loading = false;
+            apiState.success = false;
             apiState.status = action.status;
             apiState.message = action.message;
-            apiState.success = false;
+            break;
+        case ApiActionType.ApiLoading:
+            apiState.loading = true;
+            break;
+        case ApiActionType.ApiLoaded:
+            apiState.loading = false;
+            apiState.success = action.success;
             break;
     }
 

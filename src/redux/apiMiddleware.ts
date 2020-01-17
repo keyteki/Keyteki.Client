@@ -1,25 +1,18 @@
 import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 import { Dispatch, MiddlewareAPI, AnyAction } from 'redux';
-import { ApiType } from './types/api';
+import { ApiActionType } from './types';
 
-export interface ApiAction {
+export interface ApiCallAction {
     type: string;
     types: [string, string];
     apiParams: AxiosRequestConfig;
     shouldCallApi: (_: object) => boolean;
-    payload?: {};
     skipAuth?: boolean;
 }
 
 export default function callApiMiddleware({ dispatch, getState }: MiddlewareAPI) {
-    return (next: Dispatch) => async (action: AnyAction | ApiAction): Promise<{}> => {
-        const {
-            types,
-            apiParams,
-            shouldCallApi = (): boolean => true,
-            payload = {},
-            skipAuth = false
-        } = action;
+    return (next: Dispatch) => async (action: AnyAction | ApiCallAction): Promise<{}> => {
+        const { types, apiParams, shouldCallApi = (): boolean => true, skipAuth = false } = action;
 
         if (!types) {
             return next(action);
@@ -35,22 +28,18 @@ export default function callApiMiddleware({ dispatch, getState }: MiddlewareAPI)
 
         const [requestType, successType] = types;
 
-        dispatch(
-            Object.assign({}, payload, {
-                type: requestType
-            })
-        );
+        dispatch({
+            type: requestType
+        });
 
         if (!shouldCallApi(getState())) {
             return next(action);
         }
 
-        dispatch(
-            Object.assign({}, payload, {
-                type: ApiType.ApiLoading,
-                request: requestType
-            })
-        );
+        dispatch({
+            type: ApiActionType.ApiLoading,
+            request: requestType
+        });
 
         const params: AxiosRequestConfig = apiParams || {};
         params.headers = { 'content-type': 'application/json' };
@@ -109,32 +98,26 @@ export default function callApiMiddleware({ dispatch, getState }: MiddlewareAPI)
         }
 
         if (!response || response.status !== 200) {
-            dispatch(
-                Object.assign({}, payload, {
-                    status: status,
-                    message: message,
-                    type: 'API_FAILURE',
-                    request: requestType
-                })
-            );
+            dispatch({
+                status: status,
+                message: message,
+                type: 'API_FAILURE',
+                request: requestType
+            });
 
             return next(action);
         }
 
-        dispatch(
-            Object.assign({}, payload, {
-                response,
-                type: successType
-            })
-        );
+        dispatch({
+            response,
+            type: successType
+        });
 
-        return dispatch(
-            Object.assign({}, payload, {
-                type: ApiType.ApiLoaded,
-                success: response.data.success,
-                message: response.data.message,
-                request: requestType
-            })
-        );
+        return dispatch({
+            type: ApiActionType.ApiLoaded,
+            success: response.data.success,
+            message: response.data.message,
+            request: requestType
+        });
     };
 }

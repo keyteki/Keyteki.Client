@@ -1,10 +1,10 @@
 import React from 'react';
 import { Alert } from 'react-bootstrap';
 
-import { ApiState } from '../../redux/types/api';
+import { ApiAction } from '../../redux/types';
 
 type ApiStatusProps = {
-    state?: ApiState;
+    state?: ApiAction;
 };
 
 const ApiStatus: React.FC<ApiStatusProps> = props => {

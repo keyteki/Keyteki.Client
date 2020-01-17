@@ -5,17 +5,16 @@ import { Col } from 'react-bootstrap';
 
 import Register from '../components/Register';
 import { registerAccount } from '../../redux/actions/auth';
-import { ApiAction } from '../../redux/apiMiddleware';
+import { ApiCallAction } from '../../redux/apiMiddleware';
 import Panel from '../../components/Site/Panel';
 import ApiStatus from '../../components/Site/ApiStatus';
-import { ApiState } from '../../redux/types/api';
-import { RegisterAction } from '../../redux/types/register';
+import { ApiAction, RegisterAction } from '../../redux/types';
 import { RootState } from '../../redux/store';
 
 const RegisterContainer: React.FC = () => {
     const dispatch = useDispatch();
     const { t } = useTranslation('register');
-    const apiState = useSelector<RootState, ApiState | undefined>(
+    const apiState = useSelector<RootState, ApiAction | undefined>(
         state => state.api[RegisterAction.RegisterAccount]
     );
 
@@ -24,7 +23,7 @@ const RegisterContainer: React.FC = () => {
             <Panel title={t('Register an account')}>
                 <ApiStatus state={apiState} />
                 <Register
-                    onSubmit={(values): ApiAction => dispatch(registerAccount(values))}
+                    onSubmit={(values): ApiCallAction => dispatch(registerAccount(values))}
                 ></Register>
             </Panel>
         </Col>

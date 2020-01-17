@@ -1,11 +1,9 @@
-import { RegisterUser, RegisterAction } from '../types/register';
+import { ApiActionType, RegisterUser, RegisterAction } from '../types';
+import { ApiCallAction } from '../apiMiddleware';
 
-import { ApiType } from '../types/api';
-import { ApiAction } from '../apiMiddleware';
-
-export function registerAccount(user: RegisterUser): ApiAction {
+export function registerAccount(user: RegisterUser): ApiCallAction {
     return {
-        type: ApiType.ApiRequest,
+        type: ApiActionType.ApiRequest,
         types: [RegisterAction.RegisterAccount, RegisterAction.AccountRegisteted],
         shouldCallApi: (): boolean => true,
         skipAuth: true,
