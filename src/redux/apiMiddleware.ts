@@ -101,26 +101,19 @@ export default function callApiMiddleware({ dispatch, getState }: MiddlewareAPI)
             }
         }
 
-        if (!response) {
-            dispatch(
-                Object.assign({}, payload, {
-                    status: errorStatus,
-                    message:
-                        'An error occured communicating with the server.  Please try again later.',
-                    type: ApiType.ApiFailure,
-                    request: requestType
-                })
-            );
+        const status = response ? response.status : errorStatus;
+        let message = 'An error occured communicating with the server.  Please try again later.';
 
-            return next(action);
+        if (response && response.status === 400) {
+            message = response.statusText;
         }
 
-        if (response.status !== 200) {
+        if (!response || response.status !== 200) {
             dispatch(
                 Object.assign({}, payload, {
-                    status: response.status,
-                    message: response.data || response.statusText,
-                    type: ApiType.ApiFailure,
+                    status: status,
+                    message: message,
+                    type: 'API_FAILURE',
                     request: requestType
                 })
             );
