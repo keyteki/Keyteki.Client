@@ -1,10 +1,11 @@
 import React from 'react';
 import { Alert } from 'react-bootstrap';
 
-import { ApiAction } from '../../redux/types';
+import { ApiState } from '../../redux/types';
 
 type ApiStatusProps = {
-    state?: ApiAction;
+    state?: ApiState;
+    onClose: () => void;
 };
 
 const ApiStatus: React.FC<ApiStatusProps> = props => {
@@ -27,11 +28,13 @@ const ApiStatus: React.FC<ApiStatusProps> = props => {
     }
 
     return (
-        <div>
-            <Alert variant={props.state.success ? 'success' : 'danger'} dismissible>
-                {error}
-            </Alert>
-        </div>
+        <Alert
+            variant={props.state.success ? 'success' : 'danger'}
+            dismissible
+            onClose={props.onClose}
+        >
+            {error}
+        </Alert>
     );
 };
 

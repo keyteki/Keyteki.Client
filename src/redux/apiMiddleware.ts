@@ -94,14 +94,14 @@ export default function callApiMiddleware({ dispatch, getState }: MiddlewareAPI)
         let message = 'An error occured communicating with the server.  Please try again later.';
 
         if (response && response.status === 400) {
-            message = response.statusText;
+            message = response.data || message;
         }
 
         if (!response || response.status !== 200) {
             dispatch({
                 status: status,
                 message: message,
-                type: 'API_FAILURE',
+                type: ApiActionType.ApiFailure,
                 request: requestType
             });
 

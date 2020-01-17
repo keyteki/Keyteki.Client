@@ -1,16 +1,16 @@
-import { ApiActionType, ApiStateDictionary, ApiAction } from '../types';
+import { ApiActionType, ApiStateDictionary, ApiState, ApiResponseAction } from '../types';
 
 const initialState: ApiStateDictionary = {};
 
 export default function(
     state: ApiStateDictionary = initialState,
-    action: ApiAction
+    action: ApiResponseAction
 ): ApiStateDictionary {
     const retState = {
         ...state
     };
 
-    const apiState: ApiAction = {};
+    let apiState: ApiState | undefined = {};
 
     switch (action.type) {
         case ApiActionType.ApiFailure:
@@ -25,6 +25,10 @@ export default function(
         case ApiActionType.ApiLoaded:
             apiState.loading = false;
             apiState.success = action.success;
+            apiState.message = action.message;
+            break;
+        case ApiActionType.ClearApiStatus:
+            apiState = undefined;
             break;
     }
 
