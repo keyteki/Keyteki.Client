@@ -82,7 +82,9 @@
     }
   },
   "devDependencies": {
+    "gulp": "^4.0.2",
     "husky": "^4.0.7",
+    "i18next-parser": "^1.0.0",
     "lint-staged": "^9.5.0",
     "stylelint": "^13.0.0",
     "stylelint-config-recommended": "^3.0.0"

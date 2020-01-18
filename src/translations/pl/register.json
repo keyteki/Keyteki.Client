@@ -1,0 +1,22 @@
+{
+  "You must specify a username": "",
+  "Username must be at least 3 characters and no more than 15 characters long": "",
+  "Usernames must only use the characters a-z, 0-9, _ and -": "",
+  "Please enter a valid email address": "",
+  "You must specify an email address": "",
+  "Password must be at least 6 characters": "",
+  "You must specify a password": "",
+  "You must confirm your password": "",
+  "The passwords you have entered do not match": "",
+  "privacy": "We require information from you in order to service your access to the site. Please see the <1>privacy policy</1> for details on why we need this information and what we do with it.",
+  "Username": "",
+  "Enter a username": "",
+  "Email": "",
+  "Enter an email address": "",
+  "Password": "",
+  "Enter a password": "",
+  "Password (again)": "",
+  "Enter the same password": "",
+  "Register": "",
+  "Register an account": ""
+}

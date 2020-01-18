@@ -10,6 +10,7 @@ import Panel from '../../components/Site/Panel';
 import ApiStatus from '../../components/Site/ApiStatus';
 import { RegisterAction, ApiState, ClearApiStatusAction } from '../../redux/types';
 import { RootState } from '../../redux/store';
+import { useHistory } from 'react-router-dom';
 
 const RegisterContainer: React.FC = () => {
     const dispatch = useDispatch();
@@ -17,6 +18,14 @@ const RegisterContainer: React.FC = () => {
     const apiState = useSelector<RootState, ApiState | undefined>(
         state => state.api[RegisterAction.RegisterAccount]
     );
+    const history = useHistory();
+
+    if (apiState?.success) {
+        setTimeout(() => {
+            dispatch(clearApiStatus(RegisterAction.RegisterAccount));
+            history.push('/');
+        }, 5000);
+    }
 
     return (
         <Col lg={{ span: 10, offset: 1 }}>
