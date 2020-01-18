@@ -1,6 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 import { Dispatch, MiddlewareAPI, AnyAction } from 'redux';
 import { ApiActionType } from './types';
+import i18n from 'i18next';
 
 export interface ApiCallAction {
     type: string;
@@ -42,7 +43,10 @@ export default function callApiMiddleware({ dispatch, getState }: MiddlewareAPI)
         });
 
         const params: AxiosRequestConfig = apiParams || {};
-        params.headers = { 'content-type': 'application/json' };
+        params.headers = {
+            'Content-Type': 'application/json',
+            'Accept-Language': i18n.language
+        };
         if (!skipAuth) {
             params.headers.Authorization = `Bearer ${getState().auth.token}`;
         }

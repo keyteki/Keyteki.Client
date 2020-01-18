@@ -37,11 +37,11 @@ const languages = [
     },
     {
         name: '简体中文',
-        value: 'zhhans'
+        value: 'zh-cn'
     },
     {
         name: '繁體中文',
-        value: 'zhhant'
+        value: 'zh-tw'
     }
 ];
 
