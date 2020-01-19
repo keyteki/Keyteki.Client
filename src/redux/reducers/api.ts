@@ -1,10 +1,10 @@
-import { ApiActionType, ApiStateDictionary, ApiState, ApiResponseAction } from '../types';
+import { ApiActionType, ApiStateDictionary, ApiState, ApiStatusAction } from '../types';
 
 const initialState: ApiStateDictionary = {};
 
 export default function(
     state: ApiStateDictionary = initialState,
-    action: ApiResponseAction
+    action: ApiStatusAction
 ): ApiStateDictionary {
     const retState = {
         ...state

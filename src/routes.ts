@@ -1,4 +1,4 @@
-import Login from './pages/Login';
+import Login from './pages/containers/Login';
 import Register from './pages/containers/Register';
 import Lobby from './pages/Lobby';
 import React from 'react';

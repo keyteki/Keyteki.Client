@@ -3,22 +3,30 @@ import { Navbar, Nav } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { LinkContainer } from 'react-router-bootstrap';
 
-import { RightMenu } from '../../menus';
+import { RightMenu, MenuItem } from '../../menus';
 import LanguageSelector from './LanguageSelector';
 import './Navigation.scss';
+import { User } from '../../redux/types';
 
 type NavigationProps = {
     appName?: string;
+    user?: User;
 };
 
 const Navigation: React.FC<NavigationProps> = (props: NavigationProps) => {
-    const navLinks = RightMenu.map(menuItem => {
-        return (
+    const rightMenuItems: JSX.Element[] = [];
+
+    for (const menuItem of RightMenu) {
+        if (props.user && menuItem.showOnlyWhenLoggedOut) {
+            continue;
+        }
+
+        rightMenuItems.push(
             <LinkContainer key={menuItem.path} to={menuItem.path}>
                 <Nav.Link>{menuItem.title}</Nav.Link>
             </LinkContainer>
         );
-    });
+    }
 
     return (
         <Navbar bg='dark' variant='dark'>
@@ -28,7 +36,7 @@ const Navigation: React.FC<NavigationProps> = (props: NavigationProps) => {
             <Navbar.Toggle aria-controls='navbar' />
             <Navbar.Collapse id='navbar' className='justify-content-end'>
                 <Nav className='ml-auto pr-md-5'>
-                    {navLinks}
+                    {rightMenuItems}
                     <LanguageSelector />
                 </Nav>
             </Navbar.Collapse>

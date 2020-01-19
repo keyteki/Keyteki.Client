@@ -9,36 +9,57 @@ import registerTh from './th/register.json';
 import registerZhhans from './zh-CN/register.json';
 import registerZhhant from './zh-TW/register.json';
 
+import loginEn from './en/login.json';
+import loginDe from './de/login.json';
+import loginEs from './es/login.json';
+import loginFr from './fr/login.json';
+import loginIt from './it/login.json';
+import loginPl from './pl/login.json';
+import loginPt from './pt/login.json';
+import loginTh from './th/login.json';
+import loginZhhans from './zh-CN/login.json';
+import loginZhhant from './zh-TW/login.json';
+
 const translations = {
     en: {
-        register: registerEn
+        register: registerEn,
+        login: loginEn
     },
     de: {
-        register: registerDe
+        register: registerDe,
+        login: loginDe
     },
     es: {
-        register: registerEs
+        register: registerEs,
+        login: loginEs
     },
     fr: {
-        register: registerFr
+        register: registerFr,
+        login: loginFr
     },
     it: {
-        register: registerIt
+        register: registerIt,
+        login: loginIt
     },
     pl: {
-        register: registerPl
+        register: registerPl,
+        login: loginPl
     },
     pt: {
-        register: registerPt
+        register: registerPt,
+        login: loginPt
     },
     th: {
-        register: registerTh
+        register: registerTh,
+        login: loginTh
     },
     'zh-CN': {
-        register: registerZhhans
+        register: registerZhhans,
+        login: loginZhhans
     },
     'zh-TW': {
-        register: registerZhhant
+        register: registerZhhant,
+        login: loginZhhant
     }
 };
 

@@ -67,11 +67,11 @@ const Register: React.FC<RegisterProps> = props => {
                 onSubmit={props.onSubmit}
                 initialValues={initialValues}
             >
-                {(props: FormikProps<RegisterDetails>): ReactElement => (
+                {(formProps: FormikProps<RegisterDetails>): ReactElement => (
                     <Form
                         onSubmit={(event: React.FormEvent<HTMLFormElement>): void => {
                             event.preventDefault();
-                            props.handleSubmit(event);
+                            formProps.handleSubmit(event);
                         }}
                     >
                         <Form.Row>
@@ -81,13 +81,15 @@ const Register: React.FC<RegisterProps> = props => {
                                     name='username'
                                     type='text'
                                     placeholder={t('Enter a username')}
-                                    value={props.values.username}
-                                    onChange={props.handleChange}
-                                    onBlur={props.handleBlur}
-                                    isInvalid={props.touched.username && !!props.errors.username}
+                                    value={formProps.values.username}
+                                    onChange={formProps.handleChange}
+                                    onBlur={formProps.handleBlur}
+                                    isInvalid={
+                                        formProps.touched.username && !!formProps.errors.username
+                                    }
                                 />
                                 <Form.Control.Feedback type='invalid'>
-                                    {props.errors.username}
+                                    {formProps.errors.username}
                                 </Form.Control.Feedback>
                             </Form.Group>
                             <Form.Group as={Col} md='6' controlId='formGridEmail'>
@@ -96,13 +98,13 @@ const Register: React.FC<RegisterProps> = props => {
                                     name='email'
                                     type='email'
                                     placeholder={t('Enter an email address')}
-                                    value={props.values.email}
-                                    onChange={props.handleChange}
-                                    onBlur={props.handleBlur}
-                                    isInvalid={props.touched.email && !!props.errors.email}
+                                    value={formProps.values.email}
+                                    onChange={formProps.handleChange}
+                                    onBlur={formProps.handleBlur}
+                                    isInvalid={formProps.touched.email && !!formProps.errors.email}
                                 />
                                 <Form.Control.Feedback type='invalid'>
-                                    {props.errors.email}
+                                    {formProps.errors.email}
                                 </Form.Control.Feedback>
                             </Form.Group>
                         </Form.Row>
@@ -113,13 +115,15 @@ const Register: React.FC<RegisterProps> = props => {
                                     name='password'
                                     type='password'
                                     placeholder={t('Enter a password')}
-                                    value={props.values.password}
-                                    onChange={props.handleChange}
-                                    onBlur={props.handleBlur}
-                                    isInvalid={props.touched.password && !!props.errors.password}
+                                    value={formProps.values.password}
+                                    onChange={formProps.handleChange}
+                                    onBlur={formProps.handleBlur}
+                                    isInvalid={
+                                        formProps.touched.password && !!formProps.errors.password
+                                    }
                                 />
                                 <Form.Control.Feedback type='invalid'>
-                                    {props.errors.password}
+                                    {formProps.errors.password}
                                 </Form.Control.Feedback>
                             </Form.Group>
                             <Form.Group as={Col} md='6' controlId='formGridPassword1'>
@@ -128,15 +132,16 @@ const Register: React.FC<RegisterProps> = props => {
                                     name='passwordAgain'
                                     type='password'
                                     placeholder={t('Enter the same password')}
-                                    value={props.values.passwordAgain}
-                                    onChange={props.handleChange}
-                                    onBlur={props.handleBlur}
+                                    value={formProps.values.passwordAgain}
+                                    onChange={formProps.handleChange}
+                                    onBlur={formProps.handleBlur}
                                     isInvalid={
-                                        props.touched.passwordAgain && !!props.errors.passwordAgain
+                                        formProps.touched.passwordAgain &&
+                                        !!formProps.errors.passwordAgain
                                     }
                                 />
                                 <Form.Control.Feedback type='invalid'>
-                                    {props.errors.passwordAgain}
+                                    {formProps.errors.passwordAgain}
                                 </Form.Control.Feedback>
                             </Form.Group>
                         </Form.Row>

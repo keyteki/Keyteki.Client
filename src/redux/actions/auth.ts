@@ -1,10 +1,10 @@
-import { ApiActionType, RegisterUser, RegisterAction } from '../types';
+import { ApiActionType, RegisterUser, AuthAction, LoginDetails } from '../types';
 import { ApiCallAction } from '../apiMiddleware';
 
 export function registerAccount(user: RegisterUser): ApiCallAction {
     return {
         type: ApiActionType.ApiRequest,
-        types: [RegisterAction.RegisterAccount, RegisterAction.AccountRegisteted],
+        types: [AuthAction.RegisterAccount, AuthAction.AccountRegisteted],
         shouldCallApi: (): boolean => true,
         skipAuth: true,
         apiParams: {
@@ -13,6 +13,23 @@ export function registerAccount(user: RegisterUser): ApiCallAction {
             data: {
                 username: user.username,
                 email: user.email,
+                password: user.password
+            }
+        }
+    };
+}
+
+export function loginAccount(user: LoginDetails): ApiCallAction {
+    return {
+        type: ApiActionType.ApiRequest,
+        types: [AuthAction.LoginAccount, AuthAction.AccountLogin],
+        shouldCallApi: (): boolean => true,
+        skipAuth: true,
+        apiParams: {
+            url: '/api/account/login',
+            method: 'post',
+            data: {
+                username: user.username,
                 password: user.password
             }
         }

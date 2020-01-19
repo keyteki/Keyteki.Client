@@ -1,9 +1,10 @@
 export interface MenuItem {
     path: string;
     title: string;
+    showOnlyWhenLoggedOut: boolean;
 }
 
-export const RightMenu = [
-    { path: '/login', title: 'Login' },
-    { path: '/register', title: 'Register' }
+export const RightMenu: MenuItem[] = [
+    { path: '/login', title: 'Login', showOnlyWhenLoggedOut: true },
+    { path: '/register', title: 'Register', showOnlyWhenLoggedOut: true }
 ];

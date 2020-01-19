@@ -1,4 +1,5 @@
 import { ReduxType } from '.';
+import { AxiosResponse } from 'axios';
 
 export enum ApiActionType {
     ClearApiStatus = 'CLEAR_API_STATUS',
@@ -18,10 +19,15 @@ export type ApiState = {
     loading?: boolean;
 } & ApiResponse;
 
-export type ApiResponseAction = {
+export type ApiStatusAction = {
     request: ReduxType;
     type?: ApiActionType;
 } & ApiResponse;
+
+export type ApiResponseAction = {
+    type: ReduxType;
+    response: AxiosResponse;
+};
 
 export type ApiStateDictionary = { [key in ReduxType]?: ApiState };
 

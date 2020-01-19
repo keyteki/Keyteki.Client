@@ -62,6 +62,14 @@ export default function callApiMiddleware({ dispatch, getState }: MiddlewareAPI)
             if (axiosError && axiosError.response) {
                 response = axiosError.response;
                 if (response.status === 401) {
+                    if (skipAuth) {
+                        return dispatch({
+                            status: 401,
+                            type: ApiActionType.ApiFailure,
+                            request: requestType
+                        });
+                    }
+
                     const state = getState();
                     const authResponse = await axios({
                         url: '/api/account/token',
