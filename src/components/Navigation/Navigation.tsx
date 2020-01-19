@@ -2,11 +2,14 @@ import React from 'react';
 import { Navbar, Nav } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { LinkContainer } from 'react-router-bootstrap';
+import { useTranslation } from 'react-i18next';
 
-import { RightMenu, MenuItem } from '../../menus';
+import { RightMenu, ProfileMenu } from '../../menus';
 import LanguageSelector from './LanguageSelector';
-import './Navigation.scss';
+import ProfileDropdown from './ProfileMenu';
 import { User } from '../../redux/types';
+
+import './Navigation.scss';
 
 type NavigationProps = {
     appName?: string;
@@ -14,6 +17,7 @@ type NavigationProps = {
 };
 
 const Navigation: React.FC<NavigationProps> = (props: NavigationProps) => {
+    const { t } = useTranslation('navigation');
     const rightMenuItems: JSX.Element[] = [];
 
     for (const menuItem of RightMenu) {
@@ -23,7 +27,7 @@ const Navigation: React.FC<NavigationProps> = (props: NavigationProps) => {
 
         rightMenuItems.push(
             <LinkContainer key={menuItem.path} to={menuItem.path}>
-                <Nav.Link>{menuItem.title}</Nav.Link>
+                <Nav.Link>{t(menuItem.title)}</Nav.Link>
             </LinkContainer>
         );
     }
@@ -37,6 +41,7 @@ const Navigation: React.FC<NavigationProps> = (props: NavigationProps) => {
             <Navbar.Collapse id='navbar' className='justify-content-end'>
                 <Nav className='ml-auto pr-md-5'>
                     {rightMenuItems}
+                    <ProfileDropdown menu={ProfileMenu} user={props.user} />
                     <LanguageSelector />
                 </Nav>
             </Navbar.Collapse>

@@ -1,7 +1,11 @@
 {
 	"Enter your password": "ใส่รหัสผ่านของคุณ",
 	"Enter your username": "ใส่ชื่อผู้ใช้ของคุณ",
+	"Invalid username/password": "",
 	"Login": "เข้าสู่ระบบ",
+	"Login successful, redirecting you to the home page": "",
 	"Password": "รหัสผ่าน",
-	"Username": "ชื่อผู้ใช้"
+	"Username": "ชื่อผู้ใช้",
+	"You must specify a password": "คุณต้องระบุรหัสผ่าน",
+	"You must specify a username": "คุณต้องระบุชื่อผู้ใช้"
 }

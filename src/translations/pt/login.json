@@ -1,7 +1,11 @@
 {
 	"Enter your password": "Coloque sua senha",
 	"Enter your username": "entre com seu nome de usuário",
+	"Invalid username/password": "",
 	"Login": "Entrar",
+	"Login successful, redirecting you to the home page": "",
 	"Password": "Senha",
-	"Username": "Usuário"
+	"Username": "Usuário",
+	"You must specify a password": "Você deve informar uma senha",
+	"You must specify a username": "Você deve informar um nome de usuário"
 }

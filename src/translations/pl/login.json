@@ -1,7 +1,11 @@
 {
 	"Enter your password": "Wprowadź hasło",
 	"Enter your username": "Wpisz twoją nazwę użytkownika",
+	"Invalid username/password": "",
 	"Login": "Zaloguj Się",
+	"Login successful, redirecting you to the home page": "",
 	"Password": "Hasło",
-	"Username": "Nazwa użytkownika"
+	"Username": "Nazwa użytkownika",
+	"You must specify a password": "Musisz podać hasło",
+	"You must specify a username": "Musisz podać nazwę użytkownika"
 }

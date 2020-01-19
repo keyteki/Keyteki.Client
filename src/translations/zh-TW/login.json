@@ -1,7 +1,11 @@
 {
 	"Enter your password": "輸入您的密碼",
 	"Enter your username": "輸入你的用戶名",
+	"Invalid username/password": "",
 	"Login": "登錄",
+	"Login successful, redirecting you to the home page": "",
 	"Password": "密碼",
-	"Username": "用戶名"
+	"Username": "用戶名",
+	"You must specify a password": "您必須指定一個密碼",
+	"You must specify a username": "您必須指定一個用戶名"
 }

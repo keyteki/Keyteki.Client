@@ -1,7 +1,11 @@
 {
 	"Enter your password": "Tapez votre mot de passe",
 	"Enter your username": "Entrez votre nom d'utilisateur",
+	"Invalid username/password": "",
 	"Login": "Identifiant",
+	"Login successful, redirecting you to the home page": "",
 	"Password": "Mot de passe",
-	"Username": "Nom d'utilisateur"
+	"Username": "Nom d'utilisateur",
+	"You must specify a password": "Vous devez renseigner un mot de passe",
+	"You must specify a username": "Vous devez renseigner un nom d'utilisateur"
 }
