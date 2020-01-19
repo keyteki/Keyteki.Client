@@ -9,20 +9,20 @@ import Panel from '../../components/Site/Panel';
 import ApiStatus from '../../components/Site/ApiStatus';
 import { registerAccount, clearApiStatus } from '../../redux/actions';
 import { ApiCallAction } from '../../redux/apiMiddleware';
-import { AuthAction, ApiState, ClearApiStatusAction } from '../../redux/types';
+import { Auth, ApiState, ClearApiStatusAction, AuthAction } from '../../redux/types';
 import { RootState } from '../../redux/store';
 
 const RegisterContainer: React.FC = () => {
     const dispatch = useDispatch();
     const { t } = useTranslation('register');
     const apiState = useSelector<RootState, ApiState | undefined>(
-        state => state.api[AuthAction.RegisterAccount]
+        state => state.api[Auth.RegisterAccount]
     );
     const history = useHistory();
 
     if (apiState?.success) {
         setTimeout(() => {
-            dispatch(clearApiStatus(AuthAction.RegisterAccount));
+            dispatch(clearApiStatus(Auth.RegisterAccount));
             history.push('/');
         }, 5000);
     }
@@ -33,11 +33,11 @@ const RegisterContainer: React.FC = () => {
                 <ApiStatus
                     state={apiState}
                     onClose={(): ClearApiStatusAction =>
-                        dispatch(clearApiStatus(AuthAction.RegisterAccount))
+                        dispatch(clearApiStatus(Auth.RegisterAccount))
                     }
                 />
                 <Register
-                    onSubmit={(values): ApiCallAction => dispatch(registerAccount(values))}
+                    onSubmit={(values): AuthAction => dispatch(registerAccount(values))}
                 ></Register>
             </Panel>
         </Col>

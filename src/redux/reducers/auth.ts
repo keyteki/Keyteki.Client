@@ -1,4 +1,4 @@
-import { AuthAction, ApiResponseAction, User, AuthState } from '../types';
+import { Auth, User, AuthState, AuthAction } from '../types';
 
 interface LoginResponse {
     token: string;
@@ -8,16 +8,18 @@ interface LoginResponse {
 
 const initialState: AuthState = { registered: false };
 
-export default function(state: AuthState = initialState, action: ApiResponseAction): AuthState {
-    const response: LoginResponse = action.response?.data;
+export default function(state = initialState, action: AuthAction): AuthState {
+    let response: LoginResponse;
 
     switch (action.type) {
-        case AuthAction.AccountRegisteted:
+        case Auth.AccountRegistered:
             return {
                 ...state,
                 registered: true
             };
-        case AuthAction.AccountLogin:
+        case Auth.AccountLogin:
+            response = action.response?.data;
+
             localStorage.setItem('token', response.token);
             localStorage.setItem('refreshToken', response.refreshToken);
 
@@ -27,7 +29,12 @@ export default function(state: AuthState = initialState, action: ApiResponseActi
                 refreshToken: response.refreshToken,
                 user: response.user
             };
-            break;
+        case Auth.SetAuthTokens:
+            return {
+                ...state,
+                token: action.token,
+                refreshToken: action.refreshToken
+            };
     }
 
     return state;

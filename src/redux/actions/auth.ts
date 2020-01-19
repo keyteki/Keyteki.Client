@@ -1,10 +1,9 @@
-import { ApiActionType, RegisterUser, AuthAction, LoginDetails } from '../types';
-import { ApiCallAction } from '../apiMiddleware';
+import { RegisterUser, Auth, LoginDetails, AuthAction } from '../types';
 
-export function registerAccount(user: RegisterUser): ApiCallAction {
+export function registerAccount(user: RegisterUser): AuthAction {
     return {
-        type: ApiActionType.ApiRequest,
-        types: [AuthAction.RegisterAccount, AuthAction.AccountRegisteted],
+        type: Auth.AccountRegistered,
+        types: [Auth.RegisterAccount, Auth.AccountRegistered],
         shouldCallApi: (): boolean => true,
         skipAuth: true,
         apiParams: {
@@ -19,10 +18,10 @@ export function registerAccount(user: RegisterUser): ApiCallAction {
     };
 }
 
-export function loginAccount(user: LoginDetails): ApiCallAction {
+export function loginAccount(user: LoginDetails): AuthAction {
     return {
-        type: ApiActionType.ApiRequest,
-        types: [AuthAction.LoginAccount, AuthAction.AccountLogin],
+        type: Auth.AccountLogin,
+        types: [Auth.LoginAccount, Auth.AccountLogin],
         shouldCallApi: (): boolean => true,
         skipAuth: true,
         apiParams: {
@@ -32,6 +31,26 @@ export function loginAccount(user: LoginDetails): ApiCallAction {
                 username: user.username,
                 password: user.password
             }
+        }
+    };
+}
+
+export function setAuthTokens(token: string, refreshToken: string): AuthAction {
+    return {
+        type: Auth.SetAuthTokens,
+        token: token,
+        refreshToken: refreshToken
+    };
+}
+
+export function checkAuth(): AuthAction {
+    return {
+        type: Auth.AuthChecked,
+        types: [Auth.CheckAuth, Auth.AuthChecked],
+        shouldCallApi: (): boolean => true,
+        apiParams: {
+            url: '/api/account/checkauth',
+            method: 'post'
         }
     };
 }

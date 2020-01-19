@@ -1,7 +1,7 @@
 import { ApiActionType } from './api';
-import { AuthAction } from './auth';
+import { Auth } from './auth';
 
-export type ReduxType = ApiActionType | AuthAction;
+export type ReduxType = ApiActionType | Auth;
 
 export * from './api';
 export * from './auth';

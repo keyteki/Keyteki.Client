@@ -1,3 +1,7 @@
+import { Action } from 'redux';
+import { ApiCallAction } from '../apiMiddleware';
+import { ApiResponseAction } from './api';
+
 export type RegisterUser = {
     username: string;
     password: string;
@@ -9,11 +13,14 @@ export type LoginDetails = {
     password: string;
 };
 
-export enum AuthAction {
+export enum Auth {
     RegisterAccount = 'REGISTER_ACCOUNT',
-    AccountRegisteted = 'ACCOUNT_REGISTERED',
+    AccountRegistered = 'ACCOUNT_REGISTERED',
     LoginAccount = 'LOGIN_ACCOUNT',
-    AccountLogin = 'ACCOUNT_LOGIN'
+    AccountLogin = 'ACCOUNT_LOGIN',
+    SetAuthTokens = 'SET_AUTH_TOKENS',
+    CheckAuth = 'CHECK_AUTH',
+    AuthChecked = 'AUTH_CHECKED'
 }
 
 export interface User {
@@ -28,3 +35,27 @@ export type AuthState = {
     refreshToken?: string;
     user?: User;
 };
+
+export interface RegisterUserAction extends ApiCallAction, ApiResponseAction {
+    type: typeof Auth.AccountRegistered;
+}
+
+export interface LoginUserAction extends ApiCallAction, ApiResponseAction {
+    type: typeof Auth.AccountLogin;
+}
+
+export interface SetAuthTokenAction extends Action {
+    type: typeof Auth.SetAuthTokens;
+    token: string;
+    refreshToken: string;
+}
+
+export interface CheckAuthAction extends ApiCallAction {
+    type: typeof Auth.AuthChecked;
+}
+
+export type AuthAction =
+    | SetAuthTokenAction
+    | CheckAuthAction
+    | RegisterUserAction
+    | LoginUserAction;

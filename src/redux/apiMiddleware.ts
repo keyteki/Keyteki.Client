@@ -1,10 +1,9 @@
 import axios, { AxiosRequestConfig, AxiosError } from 'axios';
-import { Dispatch, MiddlewareAPI, AnyAction } from 'redux';
+import { Dispatch, MiddlewareAPI, Action } from 'redux';
 import { ApiActionType } from './types';
 import i18n from 'i18next';
 
 export interface ApiCallAction {
-    type: string;
     types: [string, string];
     apiParams: AxiosRequestConfig;
     shouldCallApi: (_: object) => boolean;
@@ -12,7 +11,7 @@ export interface ApiCallAction {
 }
 
 export default function callApiMiddleware({ dispatch, getState }: MiddlewareAPI) {
-    return (next: Dispatch) => async (action: AnyAction | ApiCallAction): Promise<{}> => {
+    return (next: Dispatch) => async (action: ApiCallAction & Action): Promise<{}> => {
         const { types, apiParams, shouldCallApi = (): boolean => true, skipAuth = false } = action;
 
         if (!types) {

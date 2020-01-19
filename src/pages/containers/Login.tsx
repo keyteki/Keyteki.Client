@@ -8,16 +8,15 @@ import Login from '../components/Login';
 import Panel from '../../components/Site/Panel';
 import ApiStatus from '../../components/Site/ApiStatus';
 import { RootState } from '../../redux/store';
-import { AuthAction, ApiState, ClearApiStatusAction } from '../../redux/types';
+import { Auth, ApiState, ClearApiStatusAction, AuthAction } from '../../redux/types';
 import { loginAccount, clearApiStatus } from '../../redux/actions';
-import { ApiCallAction } from '../../redux/apiMiddleware';
 
 const LoginContainer: React.FC = () => {
     const dispatch = useDispatch();
     const { t } = useTranslation('login');
     const history = useHistory();
     const apiState = useSelector<RootState, ApiState | undefined>(state => {
-        const retState = state.api[AuthAction.LoginAccount];
+        const retState = state.api[Auth.LoginAccount];
 
         if (retState && retState.status === 401) {
             retState.message = t('Invalid username/password');
@@ -25,7 +24,7 @@ const LoginContainer: React.FC = () => {
             retState.message = t('Login successful, redirecting you to the home page');
 
             setTimeout(() => {
-                dispatch(clearApiStatus(AuthAction.LoginAccount));
+                dispatch(clearApiStatus(Auth.LoginAccount));
                 history.push('/');
             }, 500);
         }
@@ -39,10 +38,10 @@ const LoginContainer: React.FC = () => {
                 <ApiStatus
                     state={apiState}
                     onClose={(): ClearApiStatusAction =>
-                        dispatch(clearApiStatus(AuthAction.LoginAccount))
+                        dispatch(clearApiStatus(Auth.LoginAccount))
                     }
                 />
-                <Login onSubmit={(values): ApiCallAction => dispatch(loginAccount(values))} />
+                <Login onSubmit={(values): AuthAction => dispatch(loginAccount(values))} />
             </Panel>
         </Col>
     );

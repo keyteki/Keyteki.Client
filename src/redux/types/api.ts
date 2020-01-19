@@ -24,10 +24,9 @@ export type ApiStatusAction = {
     type?: ApiActionType;
 } & ApiResponse;
 
-export type ApiResponseAction = {
-    type: ReduxType;
-    response: AxiosResponse;
-};
+export interface ApiResponseAction {
+    response?: AxiosResponse;
+}
 
 export type ApiStateDictionary = { [key in ReduxType]?: ApiState };
 
