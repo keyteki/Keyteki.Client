@@ -8,7 +8,6 @@ import Register from '../components/Register';
 import Panel from '../../components/Site/Panel';
 import ApiStatus from '../../components/Site/ApiStatus';
 import { registerAccount, clearApiStatus } from '../../redux/actions';
-import { ApiCallAction } from '../../redux/apiMiddleware';
 import { Auth, ApiState, ClearApiStatusAction, AuthAction } from '../../redux/types';
 import { RootState } from '../../redux/store';
 

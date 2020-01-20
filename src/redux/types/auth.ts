@@ -20,7 +20,9 @@ export enum Auth {
     AccountLogin = 'ACCOUNT_LOGIN',
     SetAuthTokens = 'SET_AUTH_TOKENS',
     CheckAuth = 'CHECK_AUTH',
-    AuthChecked = 'AUTH_CHECKED'
+    AuthChecked = 'AUTH_CHECKED',
+    RequestAuthToken = 'REQUEST_AUTH_TOKEN',
+    AuthTokenReceived = 'AUTH_TOKEN_RECEIVED'
 }
 
 export interface User {
@@ -54,8 +56,13 @@ export interface CheckAuthAction extends ApiCallAction {
     type: typeof Auth.AuthChecked;
 }
 
+export interface AuthenticateAction extends ApiCallAction, ApiResponseAction {
+    type: typeof Auth.AuthTokenReceived;
+}
+
 export type AuthAction =
     | SetAuthTokenAction
     | CheckAuthAction
     | RegisterUserAction
-    | LoginUserAction;
+    | LoginUserAction
+    | AuthenticateAction;

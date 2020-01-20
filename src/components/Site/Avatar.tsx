@@ -17,7 +17,7 @@ const Avatar: React.FC<AvatarProps> = props => {
         return null;
     }
 
-    return <img className={className} src={`/img/avatar/${props.username}.png`} />;
+    return <img className={className} src={`/img/avatar/${props.username}.png`} alt='' />;
 };
 
 export default Avatar;

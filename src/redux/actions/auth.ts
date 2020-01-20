@@ -1,4 +1,19 @@
 import { RegisterUser, Auth, LoginDetails, AuthAction } from '../types';
+import { RootState } from '../store';
+import { ThunkAction } from 'redux-thunk';
+
+function authenticateInternal(token?: string, refreshToken?: string): AuthAction {
+    return {
+        type: Auth.AuthTokenReceived,
+        types: [Auth.RequestAuthToken, Auth.AuthTokenReceived],
+        shouldCallApi: (): boolean => true,
+        apiParams: {
+            url: '/api/account/token',
+            method: 'post',
+            data: { token: token, refreshToken: refreshToken }
+        }
+    };
+}
 
 export function registerAccount(user: RegisterUser): AuthAction {
     return {
@@ -52,5 +67,16 @@ export function checkAuth(): AuthAction {
             url: '/api/account/checkauth',
             method: 'post'
         }
+    };
+}
+
+export function authenticate(): ThunkAction<void, RootState, void, AuthAction> {
+    return (
+        dispatch: (action: AuthAction) => AuthAction,
+        getState: () => RootState
+    ): AuthAction => {
+        const state = getState();
+
+        return dispatch(authenticateInternal(state.auth.token, state.auth.refreshToken));
     };
 }
