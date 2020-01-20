@@ -35,6 +35,18 @@ export default function(state = initialState, action: AuthAction): AuthState {
                 token: action.token,
                 refreshToken: action.refreshToken
             };
+        case Auth.AuthTokenReceived:
+            response = action.response?.data;
+
+            localStorage.setItem('token', response.token);
+            localStorage.setItem('refreshToken', response.refreshToken);
+
+            return {
+                ...state,
+                token: response.token,
+                refreshToken: response.refreshToken,
+                user: response.user
+            };
     }
 
     return state;
