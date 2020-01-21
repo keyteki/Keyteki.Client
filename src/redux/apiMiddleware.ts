@@ -88,14 +88,12 @@ export const callApiMiddleware: Middleware<Dispatch> = ({
     }
 
     if (!response || response.status !== 200) {
-        dispatch({
+        return dispatch({
             status: status,
             message: message,
             type: ApiActionType.ApiFailure,
             request: requestType
         });
-
-        return next(action);
     }
 
     dispatch({

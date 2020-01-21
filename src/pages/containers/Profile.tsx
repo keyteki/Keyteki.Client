@@ -3,13 +3,16 @@ import { Col } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
 import Panel from '../../components/Site/Panel';
+import Profile from '../components/Profile';
 
 const ProfileContainer: React.FC = () => {
-    const { t } = useTranslation('register');
+    const { t } = useTranslation('profile');
 
     return (
-        <Col lg={{ span: 8, offset: 2 }}>
-            <Panel title={t('Profile')}></Panel>
+        <Col lg={{ span: 10, offset: 1 }}>
+            <Panel title={t('Profile')}>
+                <Profile />
+            </Panel>
         </Col>
     );
 };

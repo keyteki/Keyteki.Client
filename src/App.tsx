@@ -22,9 +22,8 @@ const App: React.FC = () => {
 
         if (token && refreshToken) {
             dispatch(setAuthTokens(token, refreshToken));
+            dispatch(checkAuth());
         }
-
-        dispatch(checkAuth());
     };
 
     useEffect(initAuth, []);

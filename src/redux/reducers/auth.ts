@@ -38,6 +38,10 @@ export default function(state = initialState, action: AuthAction): AuthState {
         case Auth.AuthTokenReceived:
             response = action.response?.data;
 
+            if (!response) {
+                return state;
+            }
+
             localStorage.setItem('token', response.token);
             localStorage.setItem('refreshToken', response.refreshToken);
 
