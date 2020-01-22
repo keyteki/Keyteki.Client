@@ -1,4 +1,4 @@
-import { RegisterUser, Auth, LoginDetails, AuthAction } from '../types';
+import { RegisterUser, Auth, LoginDetails, AuthAction, UpdateProfileDetails } from '../types';
 import { RootState } from '../store';
 import { ThunkAction } from 'redux-thunk';
 
@@ -78,5 +78,18 @@ export function authenticate(): ThunkAction<void, RootState, void, AuthAction> {
         const state = getState();
 
         return dispatch(authenticateInternal(state.auth.token, state.auth.refreshToken));
+    };
+}
+
+export function updateProfile(username: string, profile: UpdateProfileDetails): AuthAction {
+    return {
+        type: Auth.ProfileUpdated,
+        types: [Auth.UpdateProfile, Auth.ProfileUpdated],
+        shouldCallApi: (): boolean => true,
+        apiParams: {
+            url: `/api/account/${username}`,
+            method: 'put',
+            data: profile
+        }
     };
 }

@@ -1,8 +1,12 @@
-import React, { ReactElement } from 'react';
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import React, { ReactElement, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Col, Form, Button } from 'react-bootstrap';
+import { Col, Form, Button, Alert, FormControl } from 'react-bootstrap';
 import { Formik, FormikProps } from 'formik';
 import * as yup from 'yup';
+
+import { User } from '../../redux/types';
+import Avatar from '../../components/Site/Avatar';
 
 interface ProfileDetails {
     email: string;
@@ -10,36 +14,48 @@ interface ProfileDetails {
     passwordAgain: string;
 }
 
+type ProfileProps = {
+    onSubmit: (values: ProfileDetails) => void;
+    user?: User;
+};
+
 const initialValues = {
     email: '',
     password: '',
     passwordAgain: ''
 };
 
-const Profile: React.FC = props => {
+const Profile: React.FC<ProfileProps> = props => {
     const { t } = useTranslation('profile');
+    const inputFile = useRef<FormControl & HTMLInputElement>(null);
+
+    const onAvatarUploadClick = (): void => {
+        if (!inputFile.current) {
+            return;
+        }
+
+        inputFile.current.click();
+    };
+
+    if (!props.user) {
+        return <Alert variant='danger'>You need to be logged in to view your profile.</Alert>;
+    }
+
+    initialValues.email = props.user.email;
 
     const schema = yup.object({
         email: yup
             .string()
             .email(t('Please enter a valid email address'))
             .required(t('You must specify an email address')),
-        password: yup
-            .string()
-            .min(6, t('Password must be at least 6 characters'))
-            .required(t('You must specify a password')),
+        password: yup.string().min(6, t('Password must be at least 6 characters')),
         passwordAgain: yup
             .string()
-            .required(t('You must confirm your password'))
             .oneOf([yup.ref('password'), null], t('The passwords you have entered do not match'))
     });
 
     return (
-        <Formik
-            validationSchema={schema}
-            onSubmit={() => console.info('hi')}
-            initialValues={initialValues}
-        >
+        <Formik validationSchema={schema} onSubmit={props.onSubmit} initialValues={initialValues}>
             {(formProps: FormikProps<ProfileDetails>): ReactElement => (
                 <Form
                     onSubmit={(event: React.FormEvent<HTMLFormElement>): void => {
@@ -63,7 +79,19 @@ const Profile: React.FC = props => {
                                 {formProps.errors.email}
                             </Form.Control.Feedback>
                         </Form.Group>
-                        <Button>Change</Button>
+                        <Form.Group as={Col} md='3'>
+                            <Form.Label>{t('Avatar')}</Form.Label>
+                            <div className='full-width'>
+                                <Avatar username={props.user!.username}></Avatar>
+                                <Button onClick={onAvatarUploadClick}>Change avatar</Button>
+                            </div>
+                            <Form.Control
+                                name='avatar'
+                                type='file'
+                                hidden
+                                ref={inputFile}
+                            ></Form.Control>
+                        </Form.Group>
                     </Form.Row>
                     <Form.Row>
                         <Form.Group as={Col} md='6' controlId='formGridPassword'>
@@ -102,6 +130,11 @@ const Profile: React.FC = props => {
                             </Form.Control.Feedback>
                         </Form.Group>
                     </Form.Row>
+                    <div className='text-center'>
+                        <Button variant='primary' type='submit'>
+                            {t('Save')}
+                        </Button>
+                    </div>
                 </Form>
             )}
         </Formik>

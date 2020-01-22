@@ -18,6 +18,7 @@ export default function(state = initialState, action: AuthAction): AuthState {
                 registered: true
             };
         case Auth.AccountLogin:
+        case Auth.AuthTokenReceived:
             response = action.response?.data;
 
             localStorage.setItem('token', response.token);
@@ -28,28 +29,17 @@ export default function(state = initialState, action: AuthAction): AuthState {
                 token: response.token,
                 refreshToken: response.refreshToken,
                 user: response.user
+            };
+        case Auth.AuthChecked:
+            return {
+                ...state,
+                user: action.response?.data.user
             };
         case Auth.SetAuthTokens:
             return {
                 ...state,
                 token: action.token,
                 refreshToken: action.refreshToken
-            };
-        case Auth.AuthTokenReceived:
-            response = action.response?.data;
-
-            if (!response) {
-                return state;
-            }
-
-            localStorage.setItem('token', response.token);
-            localStorage.setItem('refreshToken', response.refreshToken);
-
-            return {
-                ...state,
-                token: response.token,
-                refreshToken: response.refreshToken,
-                user: response.user
             };
     }
 

@@ -13,6 +13,11 @@ export type LoginDetails = {
     password: string;
 };
 
+export type UpdateProfileDetails = {
+    email: string;
+    password: string;
+};
+
 export enum Auth {
     RegisterAccount = 'REGISTER_ACCOUNT',
     AccountRegistered = 'ACCOUNT_REGISTERED',
@@ -22,7 +27,9 @@ export enum Auth {
     CheckAuth = 'CHECK_AUTH',
     AuthChecked = 'AUTH_CHECKED',
     RequestAuthToken = 'REQUEST_AUTH_TOKEN',
-    AuthTokenReceived = 'AUTH_TOKEN_RECEIVED'
+    AuthTokenReceived = 'AUTH_TOKEN_RECEIVED',
+    UpdateProfile = 'UPDATE_PROFILE',
+    ProfileUpdated = 'PROFILE_UPDATED'
 }
 
 export interface User {
@@ -52,7 +59,7 @@ export interface SetAuthTokenAction extends Action {
     refreshToken: string;
 }
 
-export interface CheckAuthAction extends ApiCallAction {
+export interface CheckAuthAction extends ApiCallAction, ApiResponseAction {
     type: typeof Auth.AuthChecked;
 }
 
@@ -60,9 +67,14 @@ export interface AuthenticateAction extends ApiCallAction, ApiResponseAction {
     type: typeof Auth.AuthTokenReceived;
 }
 
+export interface UpdateProfileAction extends ApiCallAction {
+    type: typeof Auth.ProfileUpdated;
+}
+
 export type AuthAction =
     | SetAuthTokenAction
     | CheckAuthAction
     | RegisterUserAction
     | LoginUserAction
-    | AuthenticateAction;
+    | AuthenticateAction
+    | UpdateProfileAction;
