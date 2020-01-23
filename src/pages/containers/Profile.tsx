@@ -25,7 +25,6 @@ const ProfileContainer: React.FC = () => {
                 <Profile
                     user={authState?.user}
                     onSubmit={(profile): AuthAction => {
-                        console.info(profile);
                         return dispatch(updateProfile(authState.user!.username, profile));
                     }}
                 />
