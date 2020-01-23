@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import React from 'react';
 import { Col, Alert } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
@@ -23,9 +24,10 @@ const ProfileContainer: React.FC = () => {
             <Panel title={t('Profile')}>
                 <Profile
                     user={authState?.user}
-                    onSubmit={(profile): AuthAction =>
-                        dispatch(updateProfile(authState.user!.username, profile))
-                    }
+                    onSubmit={(profile): AuthAction => {
+                        console.info(profile);
+                        return dispatch(updateProfile(authState.user!.username, profile));
+                    }}
                 />
             </Panel>
         </Col>

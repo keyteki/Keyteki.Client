@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import React, { ReactElement, useRef } from 'react';
+import React, { ReactElement, useRef, FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Col, Form, Button, Alert, FormControl } from 'react-bootstrap';
 import { Formik, FormikProps } from 'formik';
@@ -8,10 +8,19 @@ import * as yup from 'yup';
 import { User } from '../../redux/types';
 import Avatar from '../../components/Site/Avatar';
 
+interface SettingsDetails {
+    background: string;
+    cardSize: string;
+    windowTimer: number;
+}
+
 interface ProfileDetails {
+    avatar: any;
     email: string;
     password: string;
     passwordAgain: string;
+
+    settings: SettingsDetails;
 }
 
 type ProfileProps = {
@@ -19,15 +28,29 @@ type ProfileProps = {
     user?: User;
 };
 
-const initialValues = {
+const initialValues: ProfileDetails = {
+    avatar: undefined,
     email: '',
     password: '',
-    passwordAgain: ''
+    passwordAgain: '',
+    settings: {
+        background: '',
+        cardSize: '',
+        windowTimer: 0
+    }
 };
 
 const Profile: React.FC<ProfileProps> = props => {
     const { t } = useTranslation('profile');
     const inputFile = useRef<FormControl & HTMLInputElement>(null);
+
+    const toBase64 = (file: File): Promise<string | null> =>
+        new Promise<string | null>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = (): void => resolve(reader.result?.toString());
+            reader.onerror = (error): void => reject(error);
+        });
 
     const onAvatarUploadClick = (): void => {
         if (!inputFile.current) {
@@ -88,6 +111,22 @@ const Profile: React.FC<ProfileProps> = props => {
                             <Form.Control
                                 name='avatar'
                                 type='file'
+                                accept='image/*'
+                                onChange={async (
+                                    event: FormEvent<HTMLInputElement>
+                                ): Promise<any> => {
+                                    if (!event.currentTarget || !event.currentTarget.files) {
+                                        return;
+                                    }
+
+                                    console.info(URL.createObjectURL(event.currentTarget.files[0]));
+
+                                    formProps.setFieldValue(
+                                        'avatar',
+                                        await toBase64(event.currentTarget.files[0])
+                                    );
+                                }}
+                                onBlur={formProps.handleBlur}
                                 hidden
                                 ref={inputFile}
                             ></Form.Control>
