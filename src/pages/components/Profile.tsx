@@ -10,6 +10,7 @@ import ProfileBackground from '../../components/Profile/ProfileBackground';
 import { Constants } from '../../constants';
 
 import './Profile.scss';
+import ProfileCardSize from '../../components/Profile/ProfileCardSize';
 
 interface SettingsDetails {
     background: string;
@@ -39,6 +40,11 @@ export interface BackgroundOption {
     imageUrl: string;
 }
 
+export interface ProfileCardSizeOption {
+    name: string;
+    label: string;
+}
+
 type ProfileProps = {
     onSubmit: (values: NewProfileDetails) => void;
     user?: User;
@@ -59,8 +65,16 @@ const initialValues: ExistingProfileDetails = {
 const Profile: React.FC<ProfileProps> = props => {
     const { t } = useTranslation('profile');
     const [localBackground, setBackground] = useState<string | null>(null);
+    const [localCardSize, setCardSize] = useState<string | null>(null);
 
     const backgrounds = [{ name: 'none', label: t('none'), imageUrl: 'img/bgs/blank.png' }];
+
+    const cardSizes = [
+        { name: 'small', label: t('small') },
+        { name: 'normal', label: t('normal') },
+        { name: 'large', label: t('large') },
+        { name: 'x-large', label: t('extra-large') }
+    ];
 
     for (let i = 0; i < Constants.Houses.length; ++i) {
         backgrounds.push({
@@ -141,6 +155,11 @@ const Profile: React.FC<ProfileProps> = props => {
                         backgrounds={backgrounds}
                         selectedBackground={localBackground || props.user!.settings.background}
                         onBackgroundSelected={(name): void => setBackground(name)}
+                    />
+                    <ProfileCardSize
+                        cardSizes={cardSizes}
+                        selectedCardSize={localCardSize || props.user!.settings.cardSize}
+                        onCardSizeSelected={(name): void => setCardSize(name)}
                     />
                     <div className='text-center'>
                         <Button variant='primary' type='submit'>
