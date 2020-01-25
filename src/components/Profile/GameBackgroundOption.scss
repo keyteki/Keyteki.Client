@@ -1,0 +1,14 @@
+@import '../../styles/colours';
+@import '../../styles/fonts';
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+
+.bg-label {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+}
+
+.background-selected {
+    box-shadow: 0 0 1px 4px theme-color('secondary')
+}

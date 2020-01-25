@@ -10,7 +10,10 @@ module.exports = {
       '@typescript-eslint',
       'react'
     ],
-    rules: {"react/prop-types": [0]},
+    rules: {
+      "react/prop-types": [0], 
+      '@typescript-eslint/no-non-null-assertion': [0]
+    },
     extends: [
       'eslint:recommended',
       'plugin:react/recommended',

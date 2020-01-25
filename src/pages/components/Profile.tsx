@@ -1,12 +1,13 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-import React, { ReactElement, useRef, FormEvent, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Col, Form, Button, Alert, FormControl } from 'react-bootstrap';
+import React, { ReactElement, useState } from 'react';
+import { Form, Button, Alert } from 'react-bootstrap';
 import { Formik, FormikProps } from 'formik';
+import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { User } from '../../redux/types';
-import Avatar from '../../components/Site/Avatar';
+import ProfileMain from '../../components/Profile/ProfileMain';
+import ProfileBackground from '../../components/Profile/ProfileBackground';
+import { Constants } from '../../constants';
 
 import './Profile.scss';
 
@@ -17,7 +18,6 @@ interface SettingsDetails {
 }
 
 interface ProfileDetails {
-    avatar?: File;
     email: string;
     password: string;
     passwordAgain: string;
@@ -25,21 +25,26 @@ interface ProfileDetails {
     settings: SettingsDetails;
 }
 
-interface ProfileRetDetails {
-    avatar?: string | null;
-    email: string;
-    password: string;
-    passwordAgain: string;
+export interface ExistingProfileDetails extends ProfileDetails {
+    avatar?: File;
+}
 
-    settings: SettingsDetails;
+interface NewProfileDetails extends ProfileDetails {
+    avatar?: string | null;
+}
+
+export interface BackgroundOption {
+    name: string;
+    label: string;
+    imageUrl: string;
 }
 
 type ProfileProps = {
-    onSubmit: (values: ProfileRetDetails) => void;
+    onSubmit: (values: NewProfileDetails) => void;
     user?: User;
 };
 
-const initialValues: ProfileDetails = {
+const initialValues: ExistingProfileDetails = {
     avatar: undefined,
     email: '',
     password: '',
@@ -53,8 +58,17 @@ const initialValues: ProfileDetails = {
 
 const Profile: React.FC<ProfileProps> = props => {
     const { t } = useTranslation('profile');
-    const inputFile = useRef<FormControl & HTMLInputElement>(null);
-    const [localAvatar, setAvatar] = useState<string | null>(null);
+    const [localBackground, setBackground] = useState<string | null>(null);
+
+    const backgrounds = [{ name: 'none', label: t('none'), imageUrl: 'img/bgs/blank.png' }];
+
+    for (let i = 0; i < Constants.Houses.length; ++i) {
+        backgrounds.push({
+            name: Constants.HousesNames[i],
+            label: t(Constants.Houses[i]),
+            imageUrl: `img/bgs/${Constants.Houses[i]}.png`
+        });
+    }
 
     const toBase64 = (file: File): Promise<string | null> =>
         new Promise<string | null>((resolve, reject) => {
@@ -63,14 +77,6 @@ const Profile: React.FC<ProfileProps> = props => {
             reader.onload = (): void => resolve(reader.result?.toString().split(',')[1]);
             reader.onerror = (error): void => reject(error);
         });
-
-    const onAvatarUploadClick = (): void => {
-        if (!inputFile.current) {
-            return;
-        }
-
-        inputFile.current.click();
-    };
 
     if (!props.user) {
         return <Alert variant='danger'>You need to be logged in to view your profile.</Alert>;
@@ -84,10 +90,14 @@ const Profile: React.FC<ProfileProps> = props => {
             .test(
                 'fileSize',
                 t('Image must be less than 100KB in size'),
-                value => value.size <= 100 * 1024
+                value => !value || value.size <= 100 * 1024
             )
-            .test('fileType', t('Unsupported image format'), value =>
-                ['image/jpg', 'image/jpeg', 'image/gif', 'image/png'].includes(value.type)
+            .test(
+                'fileType',
+                t('Unsupported image format'),
+                value =>
+                    !value ||
+                    ['image/jpg', 'image/jpeg', 'image/gif', 'image/png'].includes(value.type)
             ),
         email: yup
             .string()
@@ -102,8 +112,8 @@ const Profile: React.FC<ProfileProps> = props => {
     return (
         <Formik
             validationSchema={schema}
-            onSubmit={async (values: ProfileDetails): Promise<void> => {
-                const submitValues: ProfileRetDetails = {
+            onSubmit={async (values: ExistingProfileDetails): Promise<void> => {
+                const submitValues: NewProfileDetails = {
                     avatar: values.avatar ? await toBase64(values.avatar) : null,
                     email: values.email,
                     password: values.password,
@@ -111,107 +121,27 @@ const Profile: React.FC<ProfileProps> = props => {
                     settings: values.settings
                 };
 
+                if (localBackground) {
+                    submitValues.settings.background = localBackground;
+                }
+
                 props.onSubmit(submitValues);
             }}
             initialValues={initialValues}
         >
-            {(formProps: FormikProps<ProfileDetails>): ReactElement => (
+            {(formProps: FormikProps<ExistingProfileDetails>): ReactElement => (
                 <Form
                     onSubmit={(event: React.FormEvent<HTMLFormElement>): void => {
                         event.preventDefault();
                         formProps.handleSubmit(event);
                     }}
                 >
-                    <Form.Row>
-                        <Form.Group as={Col} md='6' controlId='formGridEmail'>
-                            <Form.Label>{t('Email')}</Form.Label>
-                            <Form.Control
-                                name='email'
-                                type='text'
-                                placeholder={t('Enter an email address')}
-                                value={formProps.values.email}
-                                onChange={formProps.handleChange}
-                                onBlur={formProps.handleBlur}
-                                isInvalid={formProps.touched.email && !!formProps.errors.email}
-                            />
-                            <Form.Control.Feedback type='invalid'>
-                                {formProps.errors.email}
-                            </Form.Control.Feedback>
-                        </Form.Group>
-                        <Form.Group as={Col} md='3'>
-                            <Form.Label>{t('Avatar')}</Form.Label>
-                            <div className='full-width'>
-                                {!formProps.errors.avatar && localAvatar ? (
-                                    <img className='profile-avatar' src={localAvatar!} />
-                                ) : (
-                                    <Avatar username={props.user!.username}></Avatar>
-                                )}
-                                <Button onClick={onAvatarUploadClick}>Change avatar</Button>
-                            </div>
-                            <Form.Control
-                                name='avatar'
-                                type='file'
-                                accept='image/*'
-                                onChange={(event: FormEvent<HTMLInputElement>): void => {
-                                    if (
-                                        !event.currentTarget ||
-                                        !event.currentTarget.files ||
-                                        event.currentTarget.files.length === 0
-                                    ) {
-                                        return;
-                                    }
-
-                                    const file = event.currentTarget.files[0];
-                                    setAvatar(URL.createObjectURL(file));
-                                    formProps.setFieldValue('avatar', file);
-                                }}
-                                onBlur={formProps.handleBlur}
-                                hidden
-                                ref={inputFile}
-                                isInvalid={!!formProps.errors.avatar}
-                            ></Form.Control>
-                            <Form.Control.Feedback type='invalid'>
-                                {formProps.errors.avatar}
-                            </Form.Control.Feedback>
-                        </Form.Group>
-                    </Form.Row>
-                    <Form.Row>
-                        <Form.Group as={Col} md='6' controlId='formGridPassword'>
-                            <Form.Label>{t('Password')}</Form.Label>
-                            <Form.Control
-                                name='password'
-                                type='password'
-                                placeholder={t('Enter a password')}
-                                value={formProps.values.password}
-                                onChange={formProps.handleChange}
-                                onBlur={formProps.handleBlur}
-                                isInvalid={
-                                    formProps.touched.password && !!formProps.errors.password
-                                }
-                            />
-                            <Form.Control.Feedback type='invalid'>
-                                {formProps.errors.password}
-                            </Form.Control.Feedback>
-                        </Form.Group>
-                        <Form.Group as={Col} md='6' controlId='formGridPassword1'>
-                            <Form.Label>{t('Password (again)')}</Form.Label>
-                            <Form.Control
-                                name='passwordAgain'
-                                type='password'
-                                placeholder={t('Enter the same password')}
-                                value={formProps.values.passwordAgain}
-                                onChange={formProps.handleChange}
-                                onBlur={formProps.handleBlur}
-                                isInvalid={
-                                    formProps.touched.passwordAgain &&
-                                    !!formProps.errors.passwordAgain
-                                }
-                            />
-                            <Form.Control.Feedback type='invalid'>
-                                {formProps.errors.passwordAgain}
-                            </Form.Control.Feedback>
-                        </Form.Group>
-                    </Form.Row>
+                    <ProfileMain formProps={formProps} user={props.user} />
+                    <ProfileBackground
+                        backgrounds={backgrounds}
+                        selectedBackground={localBackground || props.user!.settings.background}
+                        onBackgroundSelected={(name): void => setBackground(name)}
+                    />
                     <div className='text-center'>
                         <Button variant='primary' type='submit'>
                             {t('Save')}

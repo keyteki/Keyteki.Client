@@ -32,10 +32,18 @@ export enum Auth {
     ProfileUpdated = 'PROFILE_UPDATED'
 }
 
+export interface Settings {
+    background: string;
+    cardSize: string;
+    windowTimer: number;
+}
+
 export interface User {
     id: string;
     username: string;
     email: string;
+
+    settings: Settings;
 }
 
 export type AuthState = {

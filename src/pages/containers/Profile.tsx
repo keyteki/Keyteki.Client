@@ -1,10 +1,8 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import React from 'react';
 import { Col, Alert } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 
-import Panel from '../../components/Site/Panel';
 import Profile from '../components/Profile';
 import { RootState } from '../../redux/store';
 import { AuthState, AuthAction } from '../../redux/types';
@@ -21,14 +19,12 @@ const ProfileContainer: React.FC = () => {
 
     return (
         <Col lg={{ span: 10, offset: 1 }}>
-            <Panel title={t('Profile')}>
-                <Profile
-                    user={authState?.user}
-                    onSubmit={(profile): AuthAction => {
-                        return dispatch(updateProfile(authState.user!.username, profile));
-                    }}
-                />
-            </Panel>
+            <Profile
+                user={authState?.user}
+                onSubmit={(profile): AuthAction => {
+                    return dispatch(updateProfile(authState.user!.username, profile));
+                }}
+            />
         </Col>
     );
 };
