@@ -29,7 +29,9 @@ export enum Auth {
     RequestAuthToken = 'REQUEST_AUTH_TOKEN',
     AuthTokenReceived = 'AUTH_TOKEN_RECEIVED',
     UpdateProfile = 'UPDATE_PROFILE',
-    ProfileUpdated = 'PROFILE_UPDATED'
+    ProfileUpdated = 'PROFILE_UPDATED',
+    LinkPatreon = 'LINK_PATREON',
+    PatreonLinked = 'PATREON_LINKED'
 }
 
 export interface Settings {
@@ -79,10 +81,15 @@ export interface UpdateProfileAction extends ApiCallAction {
     type: typeof Auth.ProfileUpdated;
 }
 
+export interface LinkPatreonAction extends ApiCallAction {
+    type: typeof Auth.PatreonLinked;
+}
+
 export type AuthAction =
     | SetAuthTokenAction
     | CheckAuthAction
     | RegisterUserAction
     | LoginUserAction
     | AuthenticateAction
-    | UpdateProfileAction;
+    | UpdateProfileAction
+    | LinkPatreonAction;

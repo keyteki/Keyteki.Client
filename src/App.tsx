@@ -6,14 +6,15 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import routes, { RouteEntry } from './routes';
 import { RootState } from './redux/store';
-import { AuthState } from './redux/types';
-import { setAuthTokens, checkAuth } from './redux/actions';
+import { AuthState, InitState } from './redux/types';
+import { setAuthTokens, checkAuth, setInitFinished } from './redux/actions';
 
 import './App.scss';
 import './styles/bootstrap.scss';
 
 const App: React.FC = () => {
     const authState = useSelector<RootState, AuthState | undefined>(state => state.auth);
+    const initState = useSelector<RootState, InitState | undefined>(state => state.init);
     const dispatch = useDispatch();
 
     const initAuth = (): void => {
@@ -23,10 +24,16 @@ const App: React.FC = () => {
         if (token && refreshToken) {
             dispatch(setAuthTokens(token, refreshToken));
             dispatch(checkAuth());
+        } else {
+            dispatch(setInitFinished());
         }
     };
 
     useEffect(initAuth, []);
+
+    if (!initState?.finished) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <Router>

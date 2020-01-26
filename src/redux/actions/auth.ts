@@ -93,3 +93,16 @@ export function updateProfile(username: string, profile: UpdateProfileDetails): 
         }
     };
 }
+
+export function linkPatreon(authCode: string): AuthAction {
+    return {
+        type: Auth.PatreonLinked,
+        types: [Auth.LinkPatreon, Auth.PatreonLinked],
+        shouldCallApi: (): boolean => true,
+        apiParams: {
+            url: '/api/account/linkPatreon',
+            method: 'POST',
+            data: { authCode: authCode }
+        }
+    };
+}

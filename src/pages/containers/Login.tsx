@@ -8,15 +8,15 @@ import Login from '../components/Login';
 import Panel from '../../components/Site/Panel';
 import ApiStatus from '../../components/Site/ApiStatus';
 import { RootState } from '../../redux/store';
-import { Auth, ApiState, ClearApiStatusAction, AuthAction } from '../../redux/types';
+import { Auth, ApiResponseState, ClearApiStatusAction, AuthAction } from '../../redux/types';
 import { loginAccount, clearApiStatus } from '../../redux/actions';
 
 const LoginContainer: React.FC = () => {
     const dispatch = useDispatch();
     const { t } = useTranslation('login');
     const history = useHistory();
-    const apiState = useSelector<RootState, ApiState | undefined>(state => {
-        const retState = state.api[Auth.LoginAccount];
+    const apiState = useSelector<RootState, ApiResponseState | undefined>(state => {
+        const retState = state.api.requests[Auth.LoginAccount];
 
         if (retState && retState.status === 401) {
             retState.message = t('Invalid username/password');

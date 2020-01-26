@@ -2,7 +2,7 @@ import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 import { Dispatch, MiddlewareAPI, Middleware, AnyAction } from 'redux';
 import { ApiActionType } from './types';
 import i18n from 'i18next';
-import { authenticate } from './actions';
+import { authenticate, retryRequest } from './actions';
 
 export interface ApiCallAction {
     types: [string, string];
@@ -71,6 +71,8 @@ export const callApiMiddleware: Middleware<Dispatch> = ({
                         request: requestType
                     });
                 }
+
+                dispatch(retryRequest(action));
 
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 return dispatch<any>(authenticate());

@@ -5,7 +5,13 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import Profile from '../components/Profile';
 import { RootState } from '../../redux/store';
-import { AuthState, AuthAction, ApiState, Auth, ClearApiStatusAction } from '../../redux/types';
+import {
+    AuthState,
+    AuthAction,
+    ApiResponseState,
+    Auth,
+    ClearApiStatusAction
+} from '../../redux/types';
 import { updateProfile, clearApiStatus } from '../../redux/actions';
 import ApiStatus from '../../components/Site/ApiStatus';
 
@@ -13,8 +19,8 @@ const ProfileContainer: React.FC = () => {
     const dispatch = useDispatch();
     const { t } = useTranslation('profile');
     const authState = useSelector<RootState, AuthState | undefined>(state => state.auth);
-    const apiState = useSelector<RootState, ApiState | undefined>(state => {
-        const retState = state.api[Auth.UpdateProfile];
+    const apiState = useSelector<RootState, ApiResponseState | undefined>(state => {
+        const retState = state.api.requests[Auth.UpdateProfile];
 
         if (retState && retState.success) {
             retState.message = t(

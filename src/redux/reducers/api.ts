@@ -1,16 +1,22 @@
-import { ApiActionType, ApiStateDictionary, ApiState, ApiStatusAction } from '../types';
+import { ApiActionType, ApiStateDictionary, ApiResponseState, ApiStatusAction } from '../types';
+import { ApiCallAction } from '../apiMiddleware';
 
-const initialState: ApiStateDictionary = {};
+export interface ApiState {
+    requests: ApiStateDictionary;
+    failedQueue: ApiCallAction[];
+}
 
-export default function(
-    state: ApiStateDictionary = initialState,
-    action: ApiStatusAction
-): ApiStateDictionary {
+const initialState: ApiState = {
+    requests: {},
+    failedQueue: []
+};
+
+export default function(state: ApiState = initialState, action: ApiStatusAction): ApiState {
     const retState = {
         ...state
     };
 
-    let apiState: ApiState | undefined = {};
+    let apiState: ApiResponseState | undefined = {};
 
     switch (action.type) {
         case ApiActionType.ApiFailure:
@@ -32,7 +38,7 @@ export default function(
             break;
     }
 
-    retState[action.request] = apiState;
+    retState.requests[action.request] = apiState;
 
     return retState;
 }

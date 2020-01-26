@@ -20,7 +20,11 @@ const CardSizeOption: React.FC<CardSizeProps> = props => {
     return (
         <div key={name} className='card-settings' onClick={handleClick}>
             <div className={classNames('profile-card', name, { 'card-selected': selected })}>
-                <img className={classNames('img-fluid', name)} src='/img/idbacks/identity.jpg' />
+                <img
+                    className={classNames('img-fluid', name)}
+                    src='/img/idbacks/identity.jpg'
+                    alt={label}
+                />
             </div>
             <span className='bg-label'>{label}</span>
         </div>

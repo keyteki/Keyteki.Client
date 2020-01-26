@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement, useState, useRef } from 'react';
 import { Form, Button, Alert, Col, Row } from 'react-bootstrap';
 import { Formik, FormikProps } from 'formik';
 import { useTranslation } from 'react-i18next';
@@ -8,10 +8,10 @@ import { User } from '../../redux/types';
 import ProfileMain from '../../components/Profile/ProfileMain';
 import ProfileBackground from '../../components/Profile/ProfileBackground';
 import KeyforgeGameSettings from '../../components/Profile/KeyforgeGameSettings';
+import ProfileCardSize from '../../components/Profile/ProfileCardSize';
 import { Constants } from '../../constants';
 
 import './Profile.scss';
-import ProfileCardSize from '../../components/Profile/ProfileCardSize';
 
 interface SettingsDetails {
     background: string;
@@ -28,15 +28,16 @@ interface ProfileDetails {
     email: string;
     password: string;
     passwordAgain: string;
-    gameOptions: GameOptionsDetails;
     settings: SettingsDetails;
 }
 
 export interface ExistingProfileDetails extends ProfileDetails {
+    gameOptions: GameOptionsDetails;
     avatar?: File;
 }
 
 interface NewProfileDetails extends ProfileDetails {
+    customData: string;
     avatar?: string | null;
 }
 
@@ -76,6 +77,7 @@ const Profile: React.FC<ProfileProps> = props => {
     const { t } = useTranslation('profile');
     const [localBackground, setBackground] = useState<string>(props.user!.settings.background);
     const [localCardSize, setCardSize] = useState<string>(props.user!.settings.cardSize);
+    const topRowRef = useRef<Row<'div'> & HTMLDivElement>(null);
 
     const backgrounds = [{ name: 'none', label: t('none'), imageUrl: 'img/bgs/blank.png' }];
     const cardSizes = [
@@ -145,7 +147,7 @@ const Profile: React.FC<ProfileProps> = props => {
                     password: values.password,
                     passwordAgain: values.passwordAgain,
                     settings: values.settings,
-                    gameOptions: values.gameOptions
+                    customData: JSON.stringify(values.gameOptions)
                 };
 
                 if (localBackground) {
@@ -157,6 +159,12 @@ const Profile: React.FC<ProfileProps> = props => {
                 }
 
                 props.onSubmit(submitValues);
+
+                if (!topRowRef || !topRowRef.current) {
+                    return;
+                }
+
+                topRowRef.current.scrollIntoView(false);
             }}
             initialValues={initialValues}
         >
@@ -167,7 +175,7 @@ const Profile: React.FC<ProfileProps> = props => {
                         formProps.handleSubmit(event);
                     }}
                 >
-                    <Row>
+                    <Row ref={topRowRef}>
                         <Col sm='12'>
                             <ProfileMain formProps={formProps} user={props.user} />
                         </Col>

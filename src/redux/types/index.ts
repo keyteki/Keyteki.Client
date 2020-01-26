@@ -5,3 +5,4 @@ export type ReduxType = ApiActionType | Auth;
 
 export * from './api';
 export * from './auth';
+export * from './init';

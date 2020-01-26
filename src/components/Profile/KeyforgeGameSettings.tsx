@@ -4,7 +4,7 @@ import { ExistingProfileDetails } from '../../pages/components/Profile';
 
 import React from 'react';
 import Panel from '../Site/Panel';
-import { Col, Form } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
 type KeyforgeGameSettingsProps = {

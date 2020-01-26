@@ -7,6 +7,9 @@ import Avatar from '../../components/Site/Avatar';
 import { FormikProps } from 'formik';
 import { User } from '../../redux/types';
 import { ExistingProfileDetails } from '../../pages/components/Profile';
+import { PatreonClientId } from '../../constants';
+
+import './ProfileMain.scss';
 
 type ProfileMainProps = {
     formProps: FormikProps<ExistingProfileDetails>;
@@ -26,6 +29,9 @@ const ProfileMain: React.FC<ProfileMainProps> = props => {
 
         inputFile.current.click();
     };
+
+    const callbackUrl = `${window.location.origin}/patreon`;
+    const patreonUrl = `https://www.patreon.com/oauth2/authorize?response_type=code&client_id=${PatreonClientId}&redirect_uri=${callbackUrl}`;
 
     return (
         <Panel title={t('Profile')}>
@@ -47,9 +53,13 @@ const ProfileMain: React.FC<ProfileMainProps> = props => {
                 </Form.Group>
                 <Form.Group as={Col} md='3'>
                     <Form.Label>{t('Avatar')}</Form.Label>
-                    <div className='full-width'>
+                    <div>
                         {!formProps.errors.avatar && localAvatar ? (
-                            <img className='profile-avatar' src={localAvatar!} />
+                            <img
+                                className='profile-avatar'
+                                src={localAvatar!}
+                                alt={props.user!.username}
+                            />
                         ) : (
                             <Avatar username={props.user!.username}></Avatar>
                         )}
@@ -80,6 +90,15 @@ const ProfileMain: React.FC<ProfileMainProps> = props => {
                     <Form.Control.Feedback type='invalid'>
                         {formProps.errors.avatar}
                     </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group as={Col} md='3'>
+                    <Form.Label>{t('Patreon')}</Form.Label>
+                    <div>
+                        <img className='profile-patreon-icon' src='/img/Patreon_Mark_Coral.jpg' />
+                        <Button variant='secondary' href={patreonUrl}>
+                            Link Account
+                        </Button>
+                    </div>
                 </Form.Group>
             </Form.Row>
             <Form.Row>

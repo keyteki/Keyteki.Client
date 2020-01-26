@@ -22,6 +22,7 @@ const GameBackgroundOption: React.FC<GameBackgroundProps> = props => {
     return (
         <Col xs='4' md='3' onClick={handleClick}>
             <img
+                alt={label}
                 className={classNames('img-fluid', { 'background-selected': selected })}
                 src={imageUrl}
             />
