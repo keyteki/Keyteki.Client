@@ -1,5 +1,5 @@
 import React, { ReactElement, useState } from 'react';
-import { Form, Button, Alert } from 'react-bootstrap';
+import { Form, Button, Alert, Col, Row } from 'react-bootstrap';
 import { Formik, FormikProps } from 'formik';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
@@ -7,6 +7,7 @@ import * as yup from 'yup';
 import { User } from '../../redux/types';
 import ProfileMain from '../../components/Profile/ProfileMain';
 import ProfileBackground from '../../components/Profile/ProfileBackground';
+import KeyforgeGameSettings from '../../components/Profile/KeyforgeGameSettings';
 import { Constants } from '../../constants';
 
 import './Profile.scss';
@@ -18,11 +19,16 @@ interface SettingsDetails {
     windowTimer: number;
 }
 
+interface GameOptionsDetails {
+    orderForcedAbilities: boolean;
+    confirmOneClick: boolean;
+}
+
 interface ProfileDetails {
     email: string;
     password: string;
     passwordAgain: string;
-
+    gameOptions: GameOptionsDetails;
     settings: SettingsDetails;
 }
 
@@ -59,16 +65,19 @@ const initialValues: ExistingProfileDetails = {
         background: '',
         cardSize: '',
         windowTimer: 0
+    },
+    gameOptions: {
+        confirmOneClick: false,
+        orderForcedAbilities: false
     }
 };
 
 const Profile: React.FC<ProfileProps> = props => {
     const { t } = useTranslation('profile');
-    const [localBackground, setBackground] = useState<string | null>(null);
-    const [localCardSize, setCardSize] = useState<string | null>(null);
+    const [localBackground, setBackground] = useState<string>(props.user!.settings.background);
+    const [localCardSize, setCardSize] = useState<string>(props.user!.settings.cardSize);
 
     const backgrounds = [{ name: 'none', label: t('none'), imageUrl: 'img/bgs/blank.png' }];
-
     const cardSizes = [
         { name: 'small', label: t('small') },
         { name: 'normal', label: t('normal') },
@@ -97,6 +106,9 @@ const Profile: React.FC<ProfileProps> = props => {
     }
 
     initialValues.email = props.user.email;
+    if (props.user.customData) {
+        initialValues.gameOptions = JSON.parse(props.user.customData);
+    }
 
     const schema = yup.object({
         avatar: yup
@@ -132,11 +144,16 @@ const Profile: React.FC<ProfileProps> = props => {
                     email: values.email,
                     password: values.password,
                     passwordAgain: values.passwordAgain,
-                    settings: values.settings
+                    settings: values.settings,
+                    gameOptions: values.gameOptions
                 };
 
                 if (localBackground) {
                     submitValues.settings.background = localBackground;
+                }
+
+                if (localCardSize) {
+                    submitValues.settings.cardSize = localCardSize;
                 }
 
                 props.onSubmit(submitValues);
@@ -150,18 +167,35 @@ const Profile: React.FC<ProfileProps> = props => {
                         formProps.handleSubmit(event);
                     }}
                 >
-                    <ProfileMain formProps={formProps} user={props.user} />
-                    <ProfileBackground
-                        backgrounds={backgrounds}
-                        selectedBackground={localBackground || props.user!.settings.background}
-                        onBackgroundSelected={(name): void => setBackground(name)}
-                    />
-                    <ProfileCardSize
-                        cardSizes={cardSizes}
-                        selectedCardSize={localCardSize || props.user!.settings.cardSize}
-                        onCardSizeSelected={(name): void => setCardSize(name)}
-                    />
-                    <div className='text-center'>
+                    <Row>
+                        <Col sm='12'>
+                            <ProfileMain formProps={formProps} user={props.user} />
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col sm='12'>
+                            <ProfileBackground
+                                backgrounds={backgrounds}
+                                selectedBackground={
+                                    localBackground || props.user!.settings.background
+                                }
+                                onBackgroundSelected={(name): void => setBackground(name)}
+                            />
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col sm='6'>
+                            <ProfileCardSize
+                                cardSizes={cardSizes}
+                                selectedCardSize={localCardSize || props.user!.settings.cardSize}
+                                onCardSizeSelected={(name): void => setCardSize(name)}
+                            />
+                        </Col>
+                        <Col sm='6'>
+                            <KeyforgeGameSettings formProps={formProps} user={props.user} />
+                        </Col>
+                    </Row>
+                    <div className='text-center profile-submit'>
                         <Button variant='primary' type='submit'>
                             {t('Save')}
                         </Button>

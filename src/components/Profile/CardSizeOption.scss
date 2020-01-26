@@ -1,6 +1,42 @@
+@import '../../styles/colours';
+@import '../../styles/fonts';
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+
+$profile-card-height: 91px;
+$profile-card-width: 65px;
+
+$small-factor: 0.6;
+$large-factor: 1.4;
+$xlarge-factor: 2;
+
 .card-settings {
     display: inline-block;
   
     margin-left: 5px;
     margin-right: 5px;
+}
+
+.profile-card {
+    width: $profile-card-width;
+    height: $profile-card-height;
+
+    &.small {
+        width: $profile-card-width * $small-factor;
+        height: $profile-card-height * $small-factor;
+    }
+
+    &.large {
+        width: $profile-card-width * $large-factor;
+        height: $profile-card-height * $large-factor;
+    }
+
+    &.x-large {
+        width: $profile-card-width * $xlarge-factor;
+        height: $profile-card-height * $xlarge-factor;
+    }
+}
+
+.card-selected {
+    box-shadow: 0 0 1px 4px theme-color('secondary')
 }
