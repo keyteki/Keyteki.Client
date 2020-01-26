@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import { Alert } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
@@ -17,6 +17,7 @@ const Patreon: React.FC = () => {
     const query = useQuery();
     const history = useHistory();
     const dispatch = useDispatch();
+    const [requestSent, setRequestSent] = useState(false);
     const apiState = useSelector<RootState, ApiResponseState | undefined>(state => {
         const retState = state.api.requests[Auth.LinkPatreon];
 
@@ -35,7 +36,6 @@ const Patreon: React.FC = () => {
     });
 
     const code = query.get('code');
-
     if (!code) {
         setTimeout(() => history.push('/'), 5000);
 
@@ -46,8 +46,9 @@ const Patreon: React.FC = () => {
                 )}
             </Alert>
         );
-    } else if (!apiState) {
+    } else if (!requestSent) {
         dispatch(linkPatreon(code!));
+        setRequestSent(true);
     }
 
     return apiState?.loading ? (

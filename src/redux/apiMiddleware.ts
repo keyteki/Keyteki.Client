@@ -1,8 +1,8 @@
 import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 import { Dispatch, MiddlewareAPI, Middleware, AnyAction } from 'redux';
-import { ApiActionType } from './types';
+import { ApiActionType, Auth } from './types';
 import i18n from 'i18next';
-import { authenticate, retryRequest } from './actions';
+import { authenticate, retryRequest, clearFailedRequests } from './actions';
 
 export interface ApiCallAction {
     types: [string, string];
@@ -30,12 +30,13 @@ export const callApiMiddleware: Middleware<Dispatch> = ({
     }
 
     const [requestType, successType] = types;
+    const state = getState();
 
     dispatch({
         type: requestType
     });
 
-    if (!shouldCallApi(getState())) {
+    if (!shouldCallApi(state)) {
         return next(action);
     }
 
@@ -50,7 +51,7 @@ export const callApiMiddleware: Middleware<Dispatch> = ({
         'Accept-Language': i18n.language
     };
     if (!skipAuth) {
-        params.headers.Authorization = `Bearer ${getState().auth.token}`;
+        params.headers.Authorization = `Bearer ${state.auth.token}`;
     }
 
     let response;
@@ -102,6 +103,18 @@ export const callApiMiddleware: Middleware<Dispatch> = ({
         response,
         type: successType
     });
+
+    if (successType === Auth.AuthTokenReceived) {
+        const failedRequests = state.api.failedQueue;
+
+        if (failedRequests.length > 0) {
+            for (const request of failedRequests) {
+                dispatch(request);
+            }
+
+            dispatch(clearFailedRequests());
+        }
+    }
 
     return dispatch({
         type: ApiActionType.ApiLoaded,

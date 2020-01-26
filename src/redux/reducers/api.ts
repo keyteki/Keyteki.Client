@@ -1,4 +1,4 @@
-import { ApiActionType, ApiStateDictionary, ApiResponseState, ApiStatusAction } from '../types';
+import { ApiActionType, ApiStateDictionary, ApiResponseState, ApiAction } from '../types';
 import { ApiCallAction } from '../apiMiddleware';
 
 export interface ApiState {
@@ -11,7 +11,7 @@ const initialState: ApiState = {
     failedQueue: []
 };
 
-export default function(state: ApiState = initialState, action: ApiStatusAction): ApiState {
+export default function(state: ApiState = initialState, action: ApiAction): ApiState {
     const retState = {
         ...state
     };
@@ -36,9 +36,20 @@ export default function(state: ApiState = initialState, action: ApiStatusAction)
         case ApiActionType.ClearApiStatus:
             apiState = undefined;
             break;
+        case ApiActionType.RetryRequest:
+            retState.failedQueue.push(action.action);
+            break;
+        case ApiActionType.ClearFailedRequests:
+            retState.failedQueue = [];
+            break;
     }
 
-    retState.requests[action.request] = apiState;
+    if (
+        action.type !== ApiActionType.RetryRequest &&
+        action.type !== ApiActionType.ClearFailedRequests
+    ) {
+        retState.requests[action.request] = apiState;
+    }
 
     return retState;
 }

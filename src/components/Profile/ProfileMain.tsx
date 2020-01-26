@@ -94,7 +94,11 @@ const ProfileMain: React.FC<ProfileMainProps> = props => {
                 <Form.Group as={Col} md='3'>
                     <Form.Label>{t('Patreon')}</Form.Label>
                     <div>
-                        <img className='profile-patreon-icon' src='/img/Patreon_Mark_Coral.jpg' />
+                        <img
+                            className='profile-patreon-icon'
+                            src='/img/Patreon_Mark_Coral.jpg'
+                            alt={t('Patreon Logo')}
+                        />
                         <Button variant='secondary' href={patreonUrl}>
                             Link Account
                         </Button>

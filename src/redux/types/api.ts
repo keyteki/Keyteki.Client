@@ -8,7 +8,8 @@ export enum ApiActionType {
     ApiLoading = 'API_LOADING',
     ApiFailure = 'API_FAILURE',
     ApiLoaded = 'API_LOADED',
-    RetryRequest = 'RETRY_REQUEST'
+    RetryRequest = 'RETRY_REQUEST',
+    ClearFailedRequests = 'CLEAR_FAILED_REQUESTS'
 }
 
 export interface ApiResponse {
@@ -23,7 +24,11 @@ export type ApiResponseState = {
 
 export type ApiStatusAction = {
     request: ReduxType;
-    type?: ApiActionType;
+    type:
+        | typeof ApiActionType.ApiFailure
+        | ApiActionType.ApiLoaded
+        | ApiActionType.ApiLoading
+        | ApiActionType.ApiRequest;
 } & ApiResponse;
 
 export interface ApiResponseAction {
@@ -42,4 +47,12 @@ export interface RetryRequestAction {
     action: ApiCallAction;
 }
 
-export type ApiAction = ClearApiStatusAction;
+export interface ClearFailedRequestsAction {
+    type: typeof ApiActionType.ClearFailedRequests;
+}
+
+export type ApiAction =
+    | ClearApiStatusAction
+    | RetryRequestAction
+    | ApiStatusAction
+    | ClearFailedRequestsAction;
