@@ -64,7 +64,9 @@ const ProfileMain: React.FC<ProfileMainProps> = props => {
                         ) : (
                             <Avatar username={user!.username}></Avatar>
                         )}
-                        <Button onClick={onAvatarUploadClick}>Change avatar</Button>
+                        <Button variant='secondary' onClick={onAvatarUploadClick}>
+                            Change avatar
+                        </Button>
                     </div>
                     <Form.Control
                         name='avatar'

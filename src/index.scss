@@ -58,6 +58,18 @@ a {
     }
 }
 
+.btn-secondary {
+    background-image: url('./img/button-orange.png');
+
+    &:hover {
+        background-image: url('./img/button-orange-hover.png');
+    }
+
+    &:focus:active {
+        background-image: url('./img/button-orange-hover.png');
+    }
+}
+
 .alert {
     ul {
         list-style: none;

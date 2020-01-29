@@ -170,6 +170,7 @@ const Profile: React.FC<ProfileProps> = props => {
         >
             {(formProps: FormikProps<ExistingProfileDetails>): ReactElement => (
                 <Form
+                    className='profile-form'
                     onSubmit={(event: React.FormEvent<HTMLFormElement>): void => {
                         event.preventDefault();
                         formProps.handleSubmit(event);
