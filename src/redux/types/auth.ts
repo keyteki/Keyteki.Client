@@ -34,6 +34,12 @@ export enum Auth {
     PatreonLinked = 'PATREON_LINKED'
 }
 
+export enum PatreonStatus {
+    Unlinked = 0,
+    Linked = 1,
+    Pledged = 2
+}
+
 export interface Settings {
     background: string;
     cardSize: string;
@@ -46,6 +52,7 @@ export interface User {
     email: string;
     customData: string;
     settings: Settings;
+    patreonStatus: PatreonStatus;
 }
 
 export type AuthState = {

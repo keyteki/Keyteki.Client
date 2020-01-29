@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import Panel from '../../components/Site/Panel';
 import Avatar from '../../components/Site/Avatar';
 import { FormikProps } from 'formik';
-import { User } from '../../redux/types';
+import { User, PatreonStatus } from '../../redux/types';
 import { ExistingProfileDetails } from '../../pages/components/Profile';
 import { PatreonClientId } from '../../constants';
 
@@ -21,6 +21,7 @@ const ProfileMain: React.FC<ProfileMainProps> = props => {
     const inputFile = useRef<FormControl & HTMLInputElement>(null);
     const [localAvatar, setAvatar] = useState<string | null>(null);
     const formProps = props.formProps;
+    const { user } = props;
 
     const onAvatarUploadClick = (): void => {
         if (!inputFile.current) {
@@ -58,10 +59,10 @@ const ProfileMain: React.FC<ProfileMainProps> = props => {
                             <img
                                 className='profile-avatar'
                                 src={localAvatar!}
-                                alt={props.user!.username}
+                                alt={user!.username}
                             />
                         ) : (
-                            <Avatar username={props.user!.username}></Avatar>
+                            <Avatar username={user!.username}></Avatar>
                         )}
                         <Button onClick={onAvatarUploadClick}>Change avatar</Button>
                     </div>
@@ -99,9 +100,13 @@ const ProfileMain: React.FC<ProfileMainProps> = props => {
                             src='/img/Patreon_Mark_Coral.jpg'
                             alt={t('Patreon Logo')}
                         />
-                        <Button variant='secondary' href={patreonUrl}>
-                            Link Account
-                        </Button>
+                        {user!.patreonStatus === PatreonStatus.Unlinked ? (
+                            <Button variant='secondary' href={patreonUrl}>
+                                Link Account
+                            </Button>
+                        ) : (
+                            <Button variant='secondary'>Unlink Account</Button>
+                        )}
                     </div>
                 </Form.Group>
             </Form.Row>
