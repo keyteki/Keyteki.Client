@@ -73,6 +73,10 @@ export const callApiMiddleware: Middleware<Dispatch> = ({
                     });
                 }
 
+                if (!state.auth.refrehToken) {
+                    return next(action);
+                }
+
                 dispatch(retryRequest(action));
 
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any

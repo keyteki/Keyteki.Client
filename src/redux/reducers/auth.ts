@@ -46,6 +46,13 @@ export default function(state = initialState, action: AuthAction): AuthState {
                 ...state,
                 sessions: action.response?.data.tokens
             };
+        case Auth.SessionRemoved:
+            return {
+                ...state,
+                sessions: state.sessions?.filter(
+                    session => session.id !== action.response?.data.tokenId
+                )
+            };
     }
 
     return state;

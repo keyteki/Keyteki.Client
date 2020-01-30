@@ -5,8 +5,14 @@ import { Col } from 'react-bootstrap';
 
 import Panel from '../../components/Site/Panel';
 import ApiStatus from '../../components/Site/ApiStatus';
-import { clearApiStatus, getActiveSessions } from '../../redux/actions';
-import { Auth, ApiResponseState, ClearApiStatusAction, AuthState } from '../../redux/types';
+import { clearApiStatus, getActiveSessions, removeSession } from '../../redux/actions';
+import {
+    Auth,
+    ApiResponseState,
+    ClearApiStatusAction,
+    AuthState,
+    RemoveSessionAction
+} from '../../redux/types';
 import { RootState } from '../../redux/store';
 import Security from '../components/Security';
 
@@ -38,7 +44,12 @@ const SecurityContainer: React.FC = () => {
                         dispatch(clearApiStatus(Auth.RequestSessions))
                     }
                 />
-                <Security sessions={authState!.sessions || []} />
+                <Security
+                    sessions={authState!.sessions || []}
+                    onRemoveSession={(id: number): RemoveSessionAction =>
+                        dispatch(removeSession(id))
+                    }
+                />
             </Panel>
         </Col>
     );

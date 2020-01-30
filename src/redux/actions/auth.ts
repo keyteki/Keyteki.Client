@@ -4,7 +4,8 @@ import {
     LoginDetails,
     AuthAction,
     UpdateProfileDetails,
-    RequestSessionsAction
+    RequestSessionsAction,
+    RemoveSessionAction
 } from '../types';
 import { RootState } from '../store';
 import { ThunkAction } from 'redux-thunk';
@@ -122,6 +123,18 @@ export function getActiveSessions(): RequestSessionsAction {
         apiParams: {
             url: '/api/account/sessions',
             method: 'GET'
+        }
+    };
+}
+
+export function removeSession(sessionId: number): RemoveSessionAction {
+    return {
+        type: Auth.SessionRemoved,
+        types: [Auth.RemoveSession, Auth.SessionRemoved],
+        shouldCallApi: (): boolean => true,
+        apiParams: {
+            url: `/api/account/sessions/${sessionId}`,
+            method: 'DELETE'
         }
     };
 }

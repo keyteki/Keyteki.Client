@@ -33,7 +33,9 @@ export enum Auth {
     LinkPatreon = 'LINK_PATREON',
     PatreonLinked = 'PATREON_LINKED',
     SessionsReceived = 'SESSIONS_RECEIVED',
-    RequestSessions = 'REQUEST_SESSIONS'
+    RequestSessions = 'REQUEST_SESSIONS',
+    RemoveSession = 'REMOVE_SESSION',
+    SessionRemoved = 'SESSION_REMOVED'
 }
 
 export enum PatreonStatus {
@@ -105,6 +107,10 @@ export interface RequestSessionsAction extends ApiCallAction, ApiResponseAction 
     type: typeof Auth.SessionsReceived;
 }
 
+export interface RemoveSessionAction extends ApiCallAction, ApiResponseAction {
+    type: typeof Auth.SessionRemoved;
+}
+
 export type AuthAction =
     | SetAuthTokenAction
     | CheckAuthAction
@@ -113,4 +119,5 @@ export type AuthAction =
     | AuthenticateAction
     | UpdateProfileAction
     | LinkPatreonAction
-    | RequestSessionsAction;
+    | RequestSessionsAction
+    | RemoveSessionAction;
