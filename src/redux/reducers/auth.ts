@@ -6,7 +6,7 @@ interface LoginResponse {
     user: User;
 }
 
-const initialState: AuthState = { registered: false };
+const initialState: AuthState = { registered: false, sessions: [] };
 
 export default function(state = initialState, action: AuthAction): AuthState {
     let response: LoginResponse;
@@ -40,6 +40,11 @@ export default function(state = initialState, action: AuthAction): AuthState {
                 ...state,
                 token: action.token,
                 refreshToken: action.refreshToken
+            };
+        case Auth.SessionsReceived:
+            return {
+                ...state,
+                sessions: action.response?.data.tokens
             };
     }
 

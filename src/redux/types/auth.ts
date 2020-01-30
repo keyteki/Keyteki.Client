@@ -31,7 +31,9 @@ export enum Auth {
     UpdateProfile = 'UPDATE_PROFILE',
     ProfileUpdated = 'PROFILE_UPDATED',
     LinkPatreon = 'LINK_PATREON',
-    PatreonLinked = 'PATREON_LINKED'
+    PatreonLinked = 'PATREON_LINKED',
+    SessionsReceived = 'SESSIONS_RECEIVED',
+    RequestSessions = 'REQUEST_SESSIONS'
 }
 
 export enum PatreonStatus {
@@ -55,11 +57,18 @@ export interface User {
     patreonStatus: PatreonStatus;
 }
 
+export interface Session {
+    id: number;
+    ip: string;
+    lastUsed: Date;
+}
+
 export type AuthState = {
     registered: boolean;
     token?: string;
     refreshToken?: string;
     user?: User;
+    sessions?: Session[];
 };
 
 export interface RegisterUserAction extends ApiCallAction, ApiResponseAction {
@@ -92,6 +101,10 @@ export interface LinkPatreonAction extends ApiCallAction {
     type: typeof Auth.PatreonLinked;
 }
 
+export interface RequestSessionsAction extends ApiCallAction, ApiResponseAction {
+    type: typeof Auth.SessionsReceived;
+}
+
 export type AuthAction =
     | SetAuthTokenAction
     | CheckAuthAction
@@ -99,4 +112,5 @@ export type AuthAction =
     | LoginUserAction
     | AuthenticateAction
     | UpdateProfileAction
-    | LinkPatreonAction;
+    | LinkPatreonAction
+    | RequestSessionsAction;

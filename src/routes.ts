@@ -5,6 +5,7 @@ import Register from './pages/containers/Register';
 import Lobby from './pages/Lobby';
 import Profile from './pages/containers/Profile';
 import Patreon from './pages/Patreon';
+import Security from './pages/containers/Security';
 
 export interface RoutedProps {
     routes?: RouteEntry[];
@@ -22,7 +23,8 @@ const routes: RouteEntry[] = [
     { path: '/login', component: Login },
     { path: '/patreon', component: Patreon },
     { path: '/profile', component: Profile },
-    { path: '/register', component: Register }
+    { path: '/register', component: Register },
+    { path: '/security', component: Security }
 ];
 
 export default routes;

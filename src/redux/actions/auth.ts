@@ -1,4 +1,11 @@
-import { RegisterUser, Auth, LoginDetails, AuthAction, UpdateProfileDetails } from '../types';
+import {
+    RegisterUser,
+    Auth,
+    LoginDetails,
+    AuthAction,
+    UpdateProfileDetails,
+    RequestSessionsAction
+} from '../types';
 import { RootState } from '../store';
 import { ThunkAction } from 'redux-thunk';
 
@@ -103,6 +110,18 @@ export function linkPatreon(authCode: string): AuthAction {
             url: '/api/account/linkPatreon',
             method: 'POST',
             data: { authCode: authCode }
+        }
+    };
+}
+
+export function getActiveSessions(): RequestSessionsAction {
+    return {
+        type: Auth.SessionsReceived,
+        types: [Auth.RequestSessions, Auth.SessionsReceived],
+        shouldCallApi: (): boolean => true,
+        apiParams: {
+            url: '/api/account/sessions',
+            method: 'GET'
         }
     };
 }
