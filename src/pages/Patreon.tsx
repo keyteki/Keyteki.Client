@@ -3,10 +3,12 @@ import { useLocation, useHistory } from 'react-router-dom';
 import { Alert } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+
 import { Auth, ApiResponseState, ClearApiStatusAction } from '../redux/types';
 import { RootState } from '../redux/store';
 import { linkPatreon, clearApiStatus } from '../redux/actions';
 import ApiStatus from '../components/Site/ApiStatus';
+import Loader from '../components/Site/Loader';
 
 function useQuery(): URLSearchParams {
     return new URLSearchParams(useLocation().search);
@@ -52,7 +54,7 @@ const Patreon: React.FC = () => {
     }
 
     return apiState?.loading ? (
-        <div>{t('Please wait while we attempt to link your patreon account...')}</div>
+        <Loader message={t('Please wait while we attempt to link your patreon account...')} />
     ) : (
         <ApiStatus
             state={apiState}
