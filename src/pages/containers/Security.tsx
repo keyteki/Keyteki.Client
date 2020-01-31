@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { Col } from 'react-bootstrap';
+import { Col, Alert } from 'react-bootstrap';
 
 import Panel from '../../components/Site/Panel';
 import ApiStatus from '../../components/Site/ApiStatus';
@@ -27,6 +27,10 @@ const SecurityContainer: React.FC = () => {
     useEffect((): void => {
         dispatch(getActiveSessions());
     }, [dispatch]);
+
+    if (!authState || !authState.user) {
+        return <Alert variant='danger'>{t('You need to be logged in to view your profile')}</Alert>;
+    }
 
     // if (apiState?.success) {
     //     setTimeout(() => {

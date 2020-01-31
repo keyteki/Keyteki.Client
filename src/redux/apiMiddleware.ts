@@ -1,10 +1,11 @@
 import axios, { AxiosRequestConfig, AxiosError } from 'axios';
-import { Dispatch, MiddlewareAPI, Middleware, AnyAction } from 'redux';
+import { Dispatch, MiddlewareAPI, Middleware, AnyAction, Action } from 'redux';
 import { ApiActionType, Auth } from './types';
 import i18n from 'i18next';
 import { authenticate, retryRequest, clearFailedRequests } from './actions';
+import { RootState } from './store';
 
-export interface ApiCallAction {
+export interface ApiCallAction extends Action {
     types: [string, string];
     apiParams: AxiosRequestConfig;
     shouldCallApi: (_: object) => boolean;
@@ -30,7 +31,7 @@ export const callApiMiddleware: Middleware<Dispatch> = ({
     }
 
     const [requestType, successType] = types;
-    const state = getState();
+    const state: RootState = getState();
 
     dispatch({
         type: requestType
@@ -73,7 +74,7 @@ export const callApiMiddleware: Middleware<Dispatch> = ({
                     });
                 }
 
-                if (!state.auth.refrehToken) {
+                if (!state.auth.refreshToken) {
                     return next(action);
                 }
 
