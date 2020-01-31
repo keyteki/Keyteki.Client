@@ -5,13 +5,14 @@ module.exports = {
       amd: true,
       node: true
     },
+    ignorePatterns: ['node-modules/'],
     parser: '@typescript-eslint/parser',
     plugins: [
       '@typescript-eslint',
       'react'
     ],
     rules: {
-      "react/prop-types": [0], 
+      "react/prop-types": [0],
       '@typescript-eslint/no-non-null-assertion': [0]
     },
     extends: [
