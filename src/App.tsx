@@ -10,7 +10,6 @@ import { RootState } from './redux/store';
 import { AuthState, InitState } from './redux/types';
 import { setAuthTokens, checkAuth, setInitFinished } from './redux/actions';
 
-import './App.scss';
 import './styles/bootstrap.scss';
 import { useTranslation } from 'react-i18next';
 
