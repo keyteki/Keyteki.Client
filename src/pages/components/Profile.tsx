@@ -1,5 +1,5 @@
 import React, { ReactElement, useState, useRef } from 'react';
-import { Form, Button, Alert, Col, Row } from 'react-bootstrap';
+import { Form, Button, Alert, Col, Row, Spinner } from 'react-bootstrap';
 import { Formik, FormikProps } from 'formik';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
@@ -55,6 +55,7 @@ export interface ProfileCardSizeOption {
 type ProfileProps = {
     onSubmit: (values: NewProfileDetails) => void;
     user?: User;
+    isLoading: boolean;
 };
 
 const initialValues: ExistingProfileDetails = {
@@ -74,9 +75,10 @@ const initialValues: ExistingProfileDetails = {
 };
 
 const Profile: React.FC<ProfileProps> = props => {
+    const { user, onSubmit, isLoading } = props;
     const { t } = useTranslation('profile');
-    const [localBackground, setBackground] = useState<string>(props.user!.settings.background);
-    const [localCardSize, setCardSize] = useState<string>(props.user!.settings.cardSize);
+    const [localBackground, setBackground] = useState<string>(user!.settings.background);
+    const [localCardSize, setCardSize] = useState<string>(user!.settings.cardSize);
     const topRowRef = useRef<Row<'div'> & HTMLDivElement>(null);
 
     const backgrounds = [{ name: 'none', label: t('none'), imageUrl: 'img/bgs/blank.png' }];
@@ -103,13 +105,13 @@ const Profile: React.FC<ProfileProps> = props => {
             reader.onerror = (error): void => reject(error);
         });
 
-    if (!props.user) {
+    if (!user) {
         return <Alert variant='danger'>You need to be logged in to view your profile.</Alert>;
     }
 
-    initialValues.email = props.user.email;
-    if (props.user.customData) {
-        initialValues.gameOptions = JSON.parse(props.user.customData);
+    initialValues.email = user.email;
+    if (user.customData) {
+        initialValues.gameOptions = JSON.parse(user.customData);
     }
 
     const schema = yup.object({
@@ -158,7 +160,7 @@ const Profile: React.FC<ProfileProps> = props => {
                     submitValues.settings.cardSize = localCardSize;
                 }
 
-                props.onSubmit(submitValues);
+                onSubmit(submitValues);
 
                 if (!topRowRef || !topRowRef.current) {
                     return;
@@ -178,16 +180,14 @@ const Profile: React.FC<ProfileProps> = props => {
                 >
                     <Row ref={topRowRef}>
                         <Col sm='12'>
-                            <ProfileMain formProps={formProps} user={props.user} />
+                            <ProfileMain formProps={formProps} user={user} />
                         </Col>
                     </Row>
                     <Row>
                         <Col sm='12'>
                             <ProfileBackground
                                 backgrounds={backgrounds}
-                                selectedBackground={
-                                    localBackground || props.user!.settings.background
-                                }
+                                selectedBackground={localBackground || user!.settings.background}
                                 onBackgroundSelected={(name): void => setBackground(name)}
                             />
                         </Col>
@@ -196,16 +196,25 @@ const Profile: React.FC<ProfileProps> = props => {
                         <Col sm='6'>
                             <ProfileCardSize
                                 cardSizes={cardSizes}
-                                selectedCardSize={localCardSize || props.user!.settings.cardSize}
+                                selectedCardSize={localCardSize || user!.settings.cardSize}
                                 onCardSizeSelected={(name): void => setCardSize(name)}
                             />
                         </Col>
                         <Col sm='6'>
-                            <KeyforgeGameSettings formProps={formProps} user={props.user} />
+                            <KeyforgeGameSettings formProps={formProps} user={user} />
                         </Col>
                     </Row>
                     <div className='text-center profile-submit'>
-                        <Button variant='primary' type='submit'>
+                        <Button variant='primary' type='submit' disabled={isLoading}>
+                            {isLoading ? (
+                                <Spinner
+                                    animation='border'
+                                    size='sm'
+                                    as={'span'}
+                                    role='status'
+                                    aria-hidden='true'
+                                />
+                            ) : null}
                             {t('Save')}
                         </Button>
                     </div>

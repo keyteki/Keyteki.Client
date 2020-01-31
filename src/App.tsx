@@ -4,14 +4,15 @@ import Navigation from './components/Navigation/Navigation';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import ReduxToastr from 'react-redux-toastr';
+import { useTranslation } from 'react-i18next';
 
 import routes, { RouteEntry } from './routes';
 import { RootState } from './redux/store';
 import { AuthState, InitState } from './redux/types';
 import { setAuthTokens, checkAuth, setInitFinished } from './redux/actions';
+import Loader from './components/Site/Loader';
 
 import './styles/bootstrap.scss';
-import { useTranslation } from 'react-i18next';
 
 const App: React.FC = () => {
     const { t } = useTranslation();
@@ -34,7 +35,7 @@ const App: React.FC = () => {
     useEffect(initAuth, []);
 
     if (!initState?.finished) {
-        return <div>Loading...</div>;
+        return <Loader message={t('Please wait while we check some details')}></Loader>;
     }
 
     const toastrConfirmOptions = {

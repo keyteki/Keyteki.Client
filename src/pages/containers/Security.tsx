@@ -15,12 +15,16 @@ import {
 } from '../../redux/types';
 import { RootState } from '../../redux/store';
 import Security from '../components/Security';
+import Loader from '../../components/Site/Loader';
 
 const SecurityContainer: React.FC = () => {
     const dispatch = useDispatch();
     const { t } = useTranslation('security');
-    const apiState = useSelector<RootState, ApiResponseState | undefined>(
-        state => state.api.requests[Auth.RegisterAccount]
+    const removeState = useSelector<RootState, ApiResponseState | undefined>(
+        state => state.api.requests[Auth.RemoveSession]
+    );
+    const loadState = useSelector<RootState, ApiResponseState | undefined>(
+        state => state.api.requests[Auth.RequestSessions]
     );
     const authState = useSelector<RootState, AuthState | undefined>(state => state.auth);
 
@@ -32,20 +36,17 @@ const SecurityContainer: React.FC = () => {
         return <Alert variant='danger'>{t('You need to be logged in to view your profile')}</Alert>;
     }
 
-    // if (apiState?.success) {
-    //     setTimeout(() => {
-    //         dispatch(clearApiStatus(Auth.RegisterAccount));
-    //         history.push('/');
-    //     }, 5000);
-    // }
+    if (loadState?.loading) {
+        return <Loader message={t('Please wait while we load your user sessions')} />;
+    }
 
     return (
         <Col lg={{ span: 10, offset: 1 }}>
             <Panel title={t('Active Sessions')}>
                 <ApiStatus
-                    state={apiState}
+                    state={removeState}
                     onClose={(): ClearApiStatusAction =>
-                        dispatch(clearApiStatus(Auth.RequestSessions))
+                        dispatch(clearApiStatus(Auth.RemoveSession))
                     }
                 />
                 <Security

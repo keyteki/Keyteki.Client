@@ -19,6 +19,11 @@ a {
 }
 
 .btn {
+    .spinner-border {
+        vertical-align: middle;
+        margin-right: 5px;
+    }
+    
     &:not(.dropdown-toggle) {
         width: 126px;
         background-position: center;
@@ -87,7 +92,6 @@ a {
         }
     }
 }
-
 
 .alert {
     ul {

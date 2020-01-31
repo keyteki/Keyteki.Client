@@ -16,6 +16,8 @@ export default function(state: ApiState = initialState, action: ApiAction): ApiS
         ...state
     };
 
+    retState.requests = { ...state.requests };
+
     let apiState: ApiResponseState | undefined = {};
 
     switch (action.type) {

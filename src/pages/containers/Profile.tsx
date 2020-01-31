@@ -50,6 +50,7 @@ const ProfileContainer: React.FC = () => {
                 onSubmit={(profile): AuthAction => {
                     return dispatch(updateProfile(authState.user!.username, profile));
                 }}
+                isLoading={apiState?.loading!}
             />
         </Col>
     );

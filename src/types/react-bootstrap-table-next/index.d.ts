@@ -120,7 +120,7 @@ type TableChangeType = 'cellEdit' | 'filter' | 'pagination' | 'sort';
 type SortOrder = 'asc' | 'desc' | TODO;
 
 interface Sorted {
-    defaultField?: string;
+    dataField?: string;
     order?: string;
 }
 

@@ -63,6 +63,7 @@ const Security: React.FC<SecurityProps> = props => {
             data={sessions}
             columns={columns}
             pagination={paginationFactory()}
+            defaultSorted={[{ dataField: 'lastUsed', order: 'desc' }]}
         />
     );
 };
