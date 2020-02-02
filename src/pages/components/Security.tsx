@@ -59,6 +59,7 @@ const Security: React.FC<SecurityProps> = props => {
     return (
         <BootstrapTable
             bootstrap4
+            striped
             keyField='id'
             data={sessions}
             columns={columns}

@@ -35,7 +35,13 @@ export enum Auth {
     SessionsReceived = 'SESSIONS_RECEIVED',
     RequestSessions = 'REQUEST_SESSIONS',
     RemoveSession = 'REMOVE_SESSION',
-    SessionRemoved = 'SESSION_REMOVED'
+    SessionRemoved = 'SESSION_REMOVED',
+    RequestBlocklist = 'REQUEST_BLOCKLIST',
+    BlocklistReceived = 'BLOCKLIST_RECEIVED',
+    RemoveBlocklistEntry = 'REMOVE_BLOCKLIST_ENTRY',
+    BlocklistEntryRemoved = 'BLOCKLIST_ENTRY_REMOVED',
+    AddBlocklistEntry = 'ADD_BLOCKLIST_ENTRY',
+    BlocklistEntryAdded = 'BLOCKLIST_ENTRY_ADDED'
 }
 
 export enum PatreonStatus {
@@ -70,7 +76,8 @@ export type AuthState = {
     token?: string;
     refreshToken?: string;
     user?: User;
-    sessions?: Session[];
+    sessions: Session[];
+    blocklist: string[];
 };
 
 export interface RegisterUserAction extends ApiCallAction, ApiResponseAction {
@@ -111,6 +118,18 @@ export interface RemoveSessionAction extends ApiCallAction, ApiResponseAction {
     type: typeof Auth.SessionRemoved;
 }
 
+export interface RequestBlocklistAction extends ApiCallAction, ApiResponseAction {
+    type: typeof Auth.BlocklistReceived;
+}
+
+export interface RemoveBlocklistEntryAction extends ApiCallAction, ApiResponseAction {
+    type: typeof Auth.BlocklistEntryRemoved;
+}
+
+export interface AddBlocklistEntryAction extends ApiCallAction, ApiResponseAction {
+    type: typeof Auth.BlocklistEntryAdded;
+}
+
 export type AuthAction =
     | SetAuthTokenAction
     | CheckAuthAction
@@ -120,4 +139,7 @@ export type AuthAction =
     | UpdateProfileAction
     | LinkPatreonAction
     | RequestSessionsAction
-    | RemoveSessionAction;
+    | RemoveSessionAction
+    | RequestBlocklistAction
+    | RemoveBlocklistEntryAction
+    | AddBlocklistEntryAction;

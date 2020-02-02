@@ -5,7 +5,10 @@ import {
     AuthAction,
     UpdateProfileDetails,
     RequestSessionsAction,
-    RemoveSessionAction
+    RemoveSessionAction,
+    RequestBlocklistAction,
+    RemoveBlocklistEntryAction,
+    AddBlocklistEntryAction
 } from '../types';
 import { RootState } from '../store';
 import { ThunkAction } from 'redux-thunk';
@@ -135,6 +138,42 @@ export function removeSession(sessionId: number): RemoveSessionAction {
         apiParams: {
             url: `/api/account/sessions/${sessionId}`,
             method: 'DELETE'
+        }
+    };
+}
+
+export function getBlocklist(): RequestBlocklistAction {
+    return {
+        type: Auth.BlocklistReceived,
+        types: [Auth.RequestBlocklist, Auth.BlocklistReceived],
+        shouldCallApi: (): boolean => true,
+        apiParams: {
+            url: '/api/account/blocklist',
+            method: 'GET'
+        }
+    };
+}
+
+export function removeBlocklistEntry(entry: string): RemoveBlocklistEntryAction {
+    return {
+        type: Auth.BlocklistEntryRemoved,
+        types: [Auth.RemoveBlocklistEntry, Auth.BlocklistEntryRemoved],
+        shouldCallApi: (): boolean => true,
+        apiParams: {
+            url: `/api/account/blocklist/${entry}`,
+            method: 'DELETE'
+        }
+    };
+}
+
+export function addBlocklistEntry(entry: string): AddBlocklistEntryAction {
+    return {
+        type: Auth.BlocklistEntryAdded,
+        types: [Auth.AddBlocklistEntry, Auth.BlocklistEntryAdded],
+        shouldCallApi: (): boolean => true,
+        apiParams: {
+            url: `/api/account/blocklist/${entry}`,
+            method: 'PUT'
         }
     };
 }

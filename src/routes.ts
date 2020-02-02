@@ -6,6 +6,7 @@ import Lobby from './pages/Lobby';
 import Profile from './pages/containers/Profile';
 import Patreon from './pages/Patreon';
 import Security from './pages/containers/Security';
+import Blocklist from './pages/containers/Blocklist';
 
 export interface RoutedProps {
     routes?: RouteEntry[];
@@ -24,7 +25,8 @@ const routes: RouteEntry[] = [
     { path: '/patreon', component: Patreon },
     { path: '/profile', component: Profile },
     { path: '/register', component: Register },
-    { path: '/security', component: Security }
+    { path: '/security', component: Security },
+    { path: '/blocklist', component: Blocklist }
 ];
 
 export default routes;

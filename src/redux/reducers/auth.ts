@@ -6,7 +6,7 @@ interface LoginResponse {
     user: User;
 }
 
-const initialState: AuthState = { registered: false, sessions: [] };
+const initialState: AuthState = { registered: false, sessions: [], blocklist: [] };
 
 export default function(state = initialState, action: AuthAction): AuthState {
     let response: LoginResponse;
@@ -52,6 +52,21 @@ export default function(state = initialState, action: AuthAction): AuthState {
                 sessions: state.sessions?.filter(
                     session => session.id !== action.response?.data.tokenId
                 )
+            };
+        case Auth.BlocklistReceived:
+            return {
+                ...state,
+                blocklist: action.response?.data.blockList
+            };
+        case Auth.BlocklistEntryRemoved:
+            return {
+                ...state,
+                blocklist: state.blocklist.filter(entry => entry !== action.response?.data.username)
+            };
+        case Auth.BlocklistEntryAdded:
+            return {
+                ...state,
+                blocklist: [...state.blocklist, action.response?.data.username]
             };
     }
 

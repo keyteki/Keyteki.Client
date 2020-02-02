@@ -254,6 +254,7 @@ declare module 'react-bootstrap-table-next' {
     export interface BootstrapTableProps<fieldIds extends string = string> extends PaginationProps {
         /** which column has unique values, ie, 'id' */
         keyField: string;
+        classes?: string;
         /**Accepts a single Array object, please see columns definition for more detail. */
         columns: Column<fieldIds>[];
         /**Provides data for your table. It accepts a single Array object. */
