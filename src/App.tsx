@@ -11,6 +11,7 @@ import { RootState } from './redux/store';
 import { AuthState, InitState } from './redux/types';
 import { setAuthTokens, checkAuth, setInitFinished } from './redux/actions';
 import Loader from './components/Site/Loader';
+import Login from './pages/containers/Login';
 
 import './styles/bootstrap.scss';
 
@@ -34,7 +35,7 @@ const App: React.FC = () => {
 
     useEffect(initAuth, []);
 
-    if (!initState?.finished) {
+    if (!initState?.failed && !initState?.finished) {
         return <Loader message={t('Please wait while we check some details')}></Loader>;
     }
 
@@ -51,9 +52,13 @@ const App: React.FC = () => {
                     <div className='main-wrapper'>
                         <Container>
                             <Switch>
-                                {routes.map((route, i) => (
-                                    <RouteWithSubRoutes key={i} {...route} />
-                                ))}
+                                {initState?.failed ? (
+                                    <Login />
+                                ) : (
+                                    routes.map((route, i) => (
+                                        <RouteWithSubRoutes key={i} {...route} />
+                                    ))
+                                )}
                             </Switch>
                         </Container>
                     </div>

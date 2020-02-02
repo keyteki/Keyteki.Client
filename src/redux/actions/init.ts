@@ -6,3 +6,9 @@ export function setInitFinished(): Action {
         type: Init.SetInitFinished
     };
 }
+
+export function initFailed(): Action {
+    return {
+        type: Init.InitFailed
+    };
+}

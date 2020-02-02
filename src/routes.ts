@@ -7,6 +7,7 @@ import Profile from './pages/containers/Profile';
 import Patreon from './pages/Patreon';
 import Security from './pages/containers/Security';
 import Blocklist from './pages/containers/Blocklist';
+import Logout from './pages/components/Logout';
 
 export interface RoutedProps {
     routes?: RouteEntry[];
@@ -26,7 +27,8 @@ const routes: RouteEntry[] = [
     { path: '/profile', component: Profile },
     { path: '/register', component: Register },
     { path: '/security', component: Security },
-    { path: '/blocklist', component: Blocklist }
+    { path: '/blocklist', component: Blocklist },
+    { path: '/logout', component: Logout }
 ];
 
 export default routes;

@@ -22,7 +22,7 @@ export enum Auth {
     RegisterAccount = 'REGISTER_ACCOUNT',
     AccountRegistered = 'ACCOUNT_REGISTERED',
     LoginAccount = 'LOGIN_ACCOUNT',
-    AccountLogin = 'ACCOUNT_LOGIN',
+    AccountLoggedIn = 'ACCOUNT_LOGGED_IN',
     SetAuthTokens = 'SET_AUTH_TOKENS',
     CheckAuth = 'CHECK_AUTH',
     AuthChecked = 'AUTH_CHECKED',
@@ -41,7 +41,9 @@ export enum Auth {
     RemoveBlocklistEntry = 'REMOVE_BLOCKLIST_ENTRY',
     BlocklistEntryRemoved = 'BLOCKLIST_ENTRY_REMOVED',
     AddBlocklistEntry = 'ADD_BLOCKLIST_ENTRY',
-    BlocklistEntryAdded = 'BLOCKLIST_ENTRY_ADDED'
+    BlocklistEntryAdded = 'BLOCKLIST_ENTRY_ADDED',
+    LogoutAccount = 'LOGOUT_ACCOUNT',
+    AccountLoggedOut = 'ACCOUNT_LOGGED_OUT'
 }
 
 export enum PatreonStatus {
@@ -85,7 +87,7 @@ export interface RegisterUserAction extends ApiCallAction, ApiResponseAction {
 }
 
 export interface LoginUserAction extends ApiCallAction, ApiResponseAction {
-    type: typeof Auth.AccountLogin;
+    type: typeof Auth.AccountLoggedIn;
 }
 
 export interface SetAuthTokenAction extends Action {
@@ -130,6 +132,10 @@ export interface AddBlocklistEntryAction extends ApiCallAction, ApiResponseActio
     type: typeof Auth.BlocklistEntryAdded;
 }
 
+export interface LogoutAccountAction extends ApiCallAction, ApiResponseAction {
+    type: typeof Auth.AccountLoggedOut;
+}
+
 export type AuthAction =
     | SetAuthTokenAction
     | CheckAuthAction
@@ -142,4 +148,5 @@ export type AuthAction =
     | RemoveSessionAction
     | RequestBlocklistAction
     | RemoveBlocklistEntryAction
-    | AddBlocklistEntryAction;
+    | AddBlocklistEntryAction
+    | LogoutAccountAction;

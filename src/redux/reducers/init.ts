@@ -2,7 +2,7 @@ import { Action } from 'redux';
 
 import { InitState, Init, AuthAction, Auth } from '../types';
 
-const initialState: InitState = { finished: false };
+const initialState: InitState = { finished: false, failed: false };
 
 export default function(state = initialState, action: Action | AuthAction): InitState {
     switch (action.type) {
@@ -11,6 +11,11 @@ export default function(state = initialState, action: Action | AuthAction): Init
             return {
                 ...state,
                 finished: true
+            };
+        case Init.InitFailed:
+            return {
+                ...state,
+                failed: true
             };
     }
 

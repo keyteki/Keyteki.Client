@@ -1,8 +1,9 @@
 import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 import { Dispatch, MiddlewareAPI, Middleware, AnyAction, Action } from 'redux';
-import { ApiActionType, Auth } from './types';
 import i18n from 'i18next';
-import { authenticate, retryRequest, clearFailedRequests } from './actions';
+
+import { ApiActionType, Auth } from './types';
+import { authenticate, retryRequest, clearFailedRequests, initFailed } from './actions';
 import { RootState } from './store';
 
 export interface ApiCallAction extends Action {
@@ -95,7 +96,11 @@ export const callApiMiddleware: Middleware<Dispatch> = ({
         message = response.data || message;
     }
 
-    if (!response || response.status !== 200) {
+    if (!response || response.status !== 200 || !response.data.success) {
+        if (successType === Auth.AuthTokenReceived) {
+            dispatch(initFailed());
+        }
+
         return dispatch({
             status: status,
             message: message,

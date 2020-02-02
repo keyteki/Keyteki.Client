@@ -17,7 +17,7 @@ export default function(state = initialState, action: AuthAction): AuthState {
                 ...state,
                 registered: true
             };
-        case Auth.AccountLogin:
+        case Auth.AccountLoggedIn:
         case Auth.AuthTokenReceived:
             response = action.response?.data;
 

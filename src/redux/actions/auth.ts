@@ -8,7 +8,8 @@ import {
     RemoveSessionAction,
     RequestBlocklistAction,
     RemoveBlocklistEntryAction,
-    AddBlocklistEntryAction
+    AddBlocklistEntryAction,
+    LogoutAccountAction
 } from '../types';
 import { RootState } from '../store';
 import { ThunkAction } from 'redux-thunk';
@@ -46,8 +47,8 @@ export function registerAccount(user: RegisterUser): AuthAction {
 
 export function loginAccount(user: LoginDetails): AuthAction {
     return {
-        type: Auth.AccountLogin,
-        types: [Auth.LoginAccount, Auth.AccountLogin],
+        type: Auth.AccountLoggedIn,
+        types: [Auth.LoginAccount, Auth.AccountLoggedIn],
         shouldCallApi: (): boolean => true,
         skipAuth: true,
         apiParams: {
@@ -175,5 +176,25 @@ export function addBlocklistEntry(entry: string): AddBlocklistEntryAction {
             url: `/api/account/blocklist/${entry}`,
             method: 'PUT'
         }
+    };
+}
+
+export function logoutAccount(): ThunkAction<void, RootState, void, LogoutAccountAction> {
+    return (
+        dispatch: (action: AuthAction) => LogoutAccountAction,
+        getState: () => RootState
+    ): LogoutAccountAction => {
+        const state = getState();
+
+        return dispatch({
+            type: Auth.AccountLoggedOut,
+            types: [Auth.LogoutAccount, Auth.AccountLoggedOut],
+            shouldCallApi: (): boolean => true,
+            apiParams: {
+                url: '/api/account/logout',
+                method: 'POST',
+                data: { refreshToken: state.auth.refreshToken }
+            }
+        });
     };
 }
