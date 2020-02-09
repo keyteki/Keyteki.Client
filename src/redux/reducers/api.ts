@@ -1,5 +1,5 @@
 import { ApiActionType, ApiStateDictionary, ApiResponseState, ApiAction } from '../types';
-import { ApiCallAction } from '../apiMiddleware';
+import { ApiCallAction } from '../middleware/apiMiddleware';
 
 export interface ApiState {
     requests: ApiStateDictionary;

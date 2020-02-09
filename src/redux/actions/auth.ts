@@ -1,3 +1,6 @@
+import { ThunkAction } from 'redux-thunk';
+import { Action } from 'redux';
+
 import {
     RegisterUser,
     Auth,
@@ -12,7 +15,6 @@ import {
     LogoutAccountAction
 } from '../types';
 import { RootState } from '../store';
-import { ThunkAction } from 'redux-thunk';
 
 function authenticateInternal(token?: string, refreshToken?: string): AuthAction {
     return {
@@ -79,6 +81,12 @@ export function checkAuth(): AuthAction {
             url: '/api/account/checkauth',
             method: 'post'
         }
+    };
+}
+
+export function authChecked(): Action {
+    return {
+        type: Auth.AuthChecked
     };
 }
 

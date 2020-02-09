@@ -2,9 +2,9 @@ import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 import { Dispatch, MiddlewareAPI, Middleware, AnyAction, Action } from 'redux';
 import i18n from 'i18next';
 
-import { ApiActionType, Auth } from './types';
-import { authenticate, retryRequest, clearFailedRequests, initFailed } from './actions';
-import { RootState } from './store';
+import { ApiActionType, Auth } from '../types';
+import { authenticate, retryRequest, clearFailedRequests, initFailed } from '../actions';
+import { RootState } from '../store';
 
 export interface ApiCallAction extends Action {
     types: [string, string];

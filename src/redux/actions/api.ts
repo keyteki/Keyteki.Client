@@ -5,7 +5,7 @@ import {
     RetryRequestAction,
     ClearFailedRequestsAction
 } from '../types';
-import { ApiCallAction } from '../apiMiddleware';
+import { ApiCallAction } from '../middleware/apiMiddleware';
 
 export function clearApiStatus(actionType: ReduxType): ClearApiStatusAction {
     return {

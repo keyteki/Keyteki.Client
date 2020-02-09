@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 import routes, { RouteEntry } from './routes';
 import { RootState } from './redux/store';
 import { AuthState, InitState } from './redux/types';
-import { setAuthTokens, checkAuth, setInitFinished } from './redux/actions';
+import { setAuthTokens, checkAuth, authChecked } from './redux/actions';
 import Loader from './components/Site/Loader';
 import Login from './pages/containers/Login';
 
@@ -29,13 +29,13 @@ const App: React.FC = () => {
             dispatch(setAuthTokens(token, refreshToken));
             dispatch(checkAuth());
         } else {
-            dispatch(setInitFinished());
+            dispatch(authChecked());
         }
     };
 
     useEffect(initAuth, []);
 
-    if (!initState?.failed && !initState?.finished) {
+    if (!initState?.finished) {
         return <Loader message={t('Please wait while we check some details')}></Loader>;
     }
 

@@ -1,5 +1,5 @@
 import { Action } from 'redux';
-import { ApiCallAction } from '../apiMiddleware';
+import { ApiCallAction } from '../middleware/apiMiddleware';
 import { ApiResponseAction } from './api';
 
 export type RegisterUser = {

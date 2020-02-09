@@ -1,6 +1,6 @@
 import { ReduxType } from '.';
 import { AxiosResponse } from 'axios';
-import { ApiCallAction } from '../apiMiddleware';
+import { ApiCallAction } from '../middleware/apiMiddleware';
 
 export enum ApiActionType {
     ClearApiStatus = 'CLEAR_API_STATUS',
