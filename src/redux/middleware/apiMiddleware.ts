@@ -57,36 +57,38 @@ export const callApiMiddleware: Middleware<Dispatch> = ({
     }
 
     let response;
-    let errorStatus = 200;
+    const errorStatus = 200;
 
     try {
         response = await axios(params);
     } catch (error) {
         const axiosError = error as AxiosError;
 
-        if (axiosError && axiosError.response) {
-            response = axiosError.response;
-            if (response.status === 401) {
-                if (skipAuth) {
-                    return dispatch({
-                        status: 401,
-                        type: ApiActionType.ApiFailure,
-                        request: requestType
-                    });
-                }
+        console.info('error happened in api call');
 
-                if (!state.auth.refreshToken) {
-                    return next(action);
-                }
+        // if (axiosError && axiosError.response) {
+        //     response = axiosError.response;
+        //     if (response.status === 401) {
+        //         if (skipAuth) {
+        //             return dispatch({
+        //                 status: 401,
+        //                 type: ApiActionType.ApiFailure,
+        //                 request: requestType
+        //             });
+        //         }
 
-                dispatch(retryRequest(action));
+        //         if (!state.auth.refreshToken) {
+        //             return next(action);
+        //         }
 
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                return dispatch<any>(authenticate());
-            } else {
-                errorStatus = response.status;
-            }
-        }
+        //         dispatch(retryRequest(action));
+
+        //         // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        //         return dispatch<any>(authenticate());
+        //     } else {
+        //         errorStatus = response.status;
+        //     }
+        // }
     }
 
     const status = response ? response.status : errorStatus;

@@ -16,7 +16,13 @@ export const startupMiddleware: Middleware<Dispatch> = ({
     dispatch,
     getState
 }: MiddlewareAPI) => next => async (action: AnyAction): Promise<{}> => {
-    if (action.type === Auth.SetAuthTokens || action.type === Init.SetInitFinished) {
+    if ([Init.SetInitFinished, Auth.SetAuthTokens, Auth.AuthTokenReceived].includes(action.type)) {
+        console.info('action is allowed type, continuing without check auth', action.type);
+        return next(action);
+    }
+
+    if (getState().init.finished) {
+        console.info('init finished, allowing', action.type);
         return next(action);
     }
 
@@ -24,6 +30,7 @@ export const startupMiddleware: Middleware<Dispatch> = ({
         const state: RootState = getState();
 
         if (!state.auth.token || !state.auth.refreshToken) {
+            console.info('no tokens, returning true');
             return true;
         }
 
@@ -31,25 +38,38 @@ export const startupMiddleware: Middleware<Dispatch> = ({
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${state.auth.token}`
-            }
+            },
+            url: '/api/account/checkauth',
+            method: 'POST'
         };
 
         let response;
 
         try {
             response = await axios(request);
+
+            console.info(response);
+            if (response && response.data.success) {
+                return true;
+            }
         } catch (error) {
             const axiosError = error as AxiosError;
+
+            if (axiosError?.response?.status === 401) {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                await dispatch<any>(authenticate());
+            }
+            console.info('got an error', axiosError);
         }
 
         return false;
     };
 
-    const authChecked = await checkAuth();
+    const authSuccess = await checkAuth();
 
     const state: RootState = getState();
 
-    if (authChecked) {
+    if (authSuccess) {
         if (!state.init.finished) {
             dispatch(setInitFinished());
         }

@@ -27,7 +27,6 @@ const App: React.FC = () => {
 
         if (token && refreshToken) {
             dispatch(setAuthTokens(token, refreshToken));
-            dispatch(checkAuth());
         } else {
             dispatch(authChecked());
         }
