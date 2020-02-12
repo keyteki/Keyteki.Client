@@ -3,7 +3,7 @@ import { Dispatch, MiddlewareAPI, Middleware, AnyAction, Action } from 'redux';
 import i18n from 'i18next';
 
 import { ApiActionType, Auth } from '../types';
-import { authenticate, retryRequest, clearFailedRequests, initFailed } from '../actions';
+import { authenticate, retryRequest, clearFailedRequests } from '../actions';
 import { RootState } from '../store';
 
 export interface ApiCallAction extends Action {
@@ -100,7 +100,7 @@ export const callApiMiddleware: Middleware<Dispatch> = ({
 
     if (!response || response.status !== 200 || !response.data.success) {
         if (successType === Auth.AuthTokenReceived) {
-            dispatch(initFailed());
+            //  dispatch(initFailed());
         }
 
         return dispatch({

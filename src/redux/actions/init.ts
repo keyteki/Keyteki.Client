@@ -7,8 +7,8 @@ export function setInitFinished(): Action {
     };
 }
 
-export function initFailed(): Action {
+export function setInitLoading(): Action {
     return {
-        type: Init.InitFailed
+        type: Init.SetInitLoading
     };
 }

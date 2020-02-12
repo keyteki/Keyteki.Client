@@ -1,9 +1,9 @@
 export enum Init {
-    SetInitFinished = 'SET_INIT_FINISHED',
-    InitFailed = 'INIT_FAILED'
+    SetInitLoading,
+    SetInitFinished = 'SET_INIT_FINISHED'
 }
 
 export type InitState = {
+    loading: boolean;
     finished: boolean;
-    failed: boolean;
 };

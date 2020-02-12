@@ -51,13 +51,9 @@ const App: React.FC = () => {
                     <div className='main-wrapper'>
                         <Container>
                             <Switch>
-                                {initState?.failed ? (
-                                    <Login />
-                                ) : (
-                                    routes.map((route, i) => (
-                                        <RouteWithSubRoutes key={i} {...route} />
-                                    ))
-                                )}
+                                {routes.map((route, i) => (
+                                    <RouteWithSubRoutes key={i} {...route} />
+                                ))}
                             </Switch>
                         </Container>
                     </div>
