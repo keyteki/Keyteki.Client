@@ -1,42 +1,37 @@
 import React, { ReactElement, useEffect } from 'react';
 import { Container } from 'react-bootstrap';
 import Navigation from './components/Navigation/Navigation';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import ReduxToastr from 'react-redux-toastr';
 import { useTranslation } from 'react-i18next';
+import { ConnectedRouter, RouterState } from 'connected-react-router';
 
 import routes, { RouteEntry } from './routes';
-import { RootState } from './redux/store';
+import { RootState, history } from './redux/store';
 import { AuthState, InitState } from './redux/types';
-import { setAuthTokens, checkAuth, authChecked } from './redux/actions';
+import { setInitLoading, checkAuth } from './redux/actions';
 import Loader from './components/Site/Loader';
-import Login from './pages/containers/Login';
+import userManager from './userManager';
 
 import './styles/bootstrap.scss';
+import { UserState } from 'redux-oidc';
 
 const App: React.FC = () => {
     const { t } = useTranslation();
-    const authState = useSelector<RootState, AuthState | undefined>(state => state.auth);
-    const initState = useSelector<RootState, InitState | undefined>(state => state.init);
+    const authState = useSelector<RootState, AuthState>(state => state.auth);
+    const initState = useSelector<RootState, InitState>(state => state.init);
     const dispatch = useDispatch();
 
     const initAuth = (): void => {
-        const token = localStorage.getItem('token');
-        const refreshToken = localStorage.getItem('refreshToken');
-
-        if (token && refreshToken) {
-            dispatch(setAuthTokens(token, refreshToken));
-        } else {
-            dispatch(authChecked());
-        }
+        dispatch(setInitLoading());
     };
 
     useEffect(initAuth, []);
 
-    if (!initState?.finished) {
-        return <Loader message={t('Please wait while we check some details')}></Loader>;
-    }
+    // if (!initState?.finished) {
+    //     return <Loader message={t('Please wait while we check some details')}></Loader>;
+    // }
 
     const toastrConfirmOptions = {
         okText: t('Ok'),
@@ -45,7 +40,7 @@ const App: React.FC = () => {
 
     return (
         <>
-            <Router>
+            <ConnectedRouter history={history}>
                 <div>
                     <Navigation appName='The Crucible Online' user={authState?.user} />
                     <div className='main-wrapper'>
@@ -58,7 +53,7 @@ const App: React.FC = () => {
                         </Container>
                     </div>
                 </div>
-            </Router>
+            </ConnectedRouter>
             <ReduxToastr
                 preventDuplicates
                 transitionIn='fadeIn'

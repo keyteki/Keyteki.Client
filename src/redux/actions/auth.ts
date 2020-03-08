@@ -16,15 +16,14 @@ import {
 } from '../types';
 import { RootState } from '../store';
 
-function authenticateInternal(token?: string, refreshToken?: string): AuthAction {
+export function authenticate(): AuthAction {
     return {
         type: Auth.AuthTokenReceived,
         types: [Auth.RequestAuthToken, Auth.AuthTokenReceived],
         shouldCallApi: (): boolean => true,
         apiParams: {
             url: '/api/account/token',
-            method: 'post',
-            data: { token: token, refreshToken: refreshToken }
+            method: 'post'
         }
     };
 }
@@ -64,11 +63,10 @@ export function loginAccount(user: LoginDetails): AuthAction {
     };
 }
 
-export function setAuthTokens(token: string, refreshToken: string): AuthAction {
+export function setAuthToken(token: string): AuthAction {
     return {
         type: Auth.SetAuthTokens,
-        token: token,
-        refreshToken: refreshToken
+        token: token
     };
 }
 
@@ -87,17 +85,6 @@ export function checkAuth(): AuthAction {
 export function authChecked(): Action {
     return {
         type: Auth.AuthChecked
-    };
-}
-
-export function authenticate(): ThunkAction<void, RootState, void, AuthAction> {
-    return (
-        dispatch: (action: AuthAction) => AuthAction,
-        getState: () => RootState
-    ): AuthAction => {
-        const state = getState();
-
-        return dispatch(authenticateInternal(state.auth.token, state.auth.refreshToken));
     };
 }
 
@@ -200,8 +187,7 @@ export function logoutAccount(): ThunkAction<void, RootState, void, LogoutAccoun
             shouldCallApi: (): boolean => true,
             apiParams: {
                 url: '/api/account/logout',
-                method: 'POST',
-                data: { refreshToken: state.auth.refreshToken }
+                method: 'POST'
             }
         });
     };

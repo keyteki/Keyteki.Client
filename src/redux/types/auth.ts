@@ -76,7 +76,6 @@ export interface Session {
 export type AuthState = {
     registered: boolean;
     token?: string;
-    refreshToken?: string;
     user?: User;
     sessions: Session[];
     blocklist: string[];
@@ -93,7 +92,6 @@ export interface LoginUserAction extends ApiCallAction, ApiResponseAction {
 export interface SetAuthTokenAction extends Action {
     type: typeof Auth.SetAuthTokens;
     token: string;
-    refreshToken: string;
 }
 
 export interface CheckAuthAction extends ApiCallAction, ApiResponseAction {

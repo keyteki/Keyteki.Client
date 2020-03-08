@@ -5,6 +5,7 @@ import i18n from 'i18next';
 import { ApiActionType, Auth } from '../types';
 import { authenticate, retryRequest, clearFailedRequests } from '../actions';
 import { RootState } from '../store';
+import userManager from '../../userManager';
 
 export interface ApiCallAction extends Action {
     types: [string, string];
@@ -53,7 +54,15 @@ export const callApiMiddleware: Middleware<Dispatch> = ({
         'Accept-Language': i18n.language
     };
     if (!skipAuth) {
-        params.headers.Authorization = `Bearer ${state.auth.token}`;
+        const user = state.oidc.user;
+        if (!user) {
+            console.info('no user');
+
+            //  userManager.signinRedirect();
+            return next(action);
+        }
+
+        params.headers.Authorization = `Bearer ${user.access_token}`;
     }
 
     let response;
@@ -99,10 +108,6 @@ export const callApiMiddleware: Middleware<Dispatch> = ({
     }
 
     if (!response || response.status !== 200 || !response.data.success) {
-        if (successType === Auth.AuthTokenReceived) {
-            //  dispatch(initFailed());
-        }
-
         return dispatch({
             status: status,
             message: message,
@@ -116,17 +121,17 @@ export const callApiMiddleware: Middleware<Dispatch> = ({
         type: successType
     });
 
-    if (successType === Auth.AuthTokenReceived) {
-        const failedRequests = state.api.failedQueue;
+    // if (successType === Auth.AuthTokenReceived) {
+    //     const failedRequests = state.api.failedQueue;
 
-        if (failedRequests.length > 0) {
-            for (const request of failedRequests) {
-                dispatch(request);
-            }
+    //     if (failedRequests.length > 0) {
+    //         for (const request of failedRequests) {
+    //             dispatch(request);
+    //         }
 
-            dispatch(clearFailedRequests());
-        }
-    }
+    //         dispatch(clearFailedRequests());
+    //     }
+    // }
 
     return dispatch({
         type: ApiActionType.ApiLoaded,

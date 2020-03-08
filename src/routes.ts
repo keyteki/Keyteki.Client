@@ -8,6 +8,7 @@ import Patreon from './pages/Patreon';
 import Security from './pages/containers/Security';
 import Blocklist from './pages/containers/Blocklist';
 import Logout from './pages/components/Logout';
+import Callback from './pages/Callback';
 
 export interface RoutedProps {
     routes?: RouteEntry[];
@@ -22,6 +23,7 @@ export interface RouteEntry {
 
 const routes: RouteEntry[] = [
     { path: '/', component: Lobby, exact: true },
+    { path: '/callback', component: Callback },
     { path: '/login', component: Login },
     { path: '/patreon', component: Patreon },
     { path: '/profile', component: Profile },
