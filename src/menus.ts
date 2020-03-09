@@ -11,7 +11,6 @@ export const RightMenu: MenuItem[] = [
 
 export const ProfileMenu: MenuItem[] = [
     { path: '/profile', title: 'Profile' },
-    { path: '/security', title: 'Security' },
     { path: '/blocklist', title: 'Block List' },
     { path: '/logout', title: 'Logout' }
 ];

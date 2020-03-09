@@ -15,7 +15,6 @@ export type LoginDetails = {
 
 export type UpdateProfileDetails = {
     email: string;
-    password: string;
 };
 
 export enum Auth {

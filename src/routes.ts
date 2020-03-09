@@ -5,7 +5,6 @@ import Register from './pages/containers/Register';
 import Lobby from './pages/Lobby';
 import Profile from './pages/containers/Profile';
 import Patreon from './pages/Patreon';
-import Security from './pages/containers/Security';
 import Blocklist from './pages/containers/Blocklist';
 import Logout from './pages/components/Logout';
 import Callback from './pages/Callback';
@@ -28,7 +27,6 @@ const routes: RouteEntry[] = [
     { path: '/patreon', component: Patreon },
     { path: '/profile', component: Profile },
     { path: '/register', component: Register },
-    { path: '/security', component: Security },
     { path: '/blocklist', component: Blocklist },
     { path: '/logout', component: Logout }
 ];

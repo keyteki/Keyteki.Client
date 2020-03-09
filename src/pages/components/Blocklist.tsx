@@ -21,7 +21,7 @@ const initialValues = {
     username: ''
 };
 
-const Security: React.FC<BlocklistProps> = props => {
+const Blocklist: React.FC<BlocklistProps> = props => {
     const { t } = useTranslation('blocklist');
     const { blocklist, onRemoveBlocklistEntry } = props;
 
@@ -122,4 +122,4 @@ const Security: React.FC<BlocklistProps> = props => {
     );
 };
 
-export default Security;
+export default Blocklist;

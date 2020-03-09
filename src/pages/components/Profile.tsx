@@ -26,8 +26,6 @@ interface GameOptionsDetails {
 
 interface ProfileDetails {
     email: string;
-    password: string;
-    passwordAgain: string;
     settings: SettingsDetails;
 }
 
@@ -61,8 +59,6 @@ type ProfileProps = {
 const initialValues: ExistingProfileDetails = {
     avatar: undefined,
     email: '',
-    password: '',
-    passwordAgain: '',
     settings: {
         background: '',
         cardSize: '',
@@ -132,11 +128,7 @@ const Profile: React.FC<ProfileProps> = props => {
         email: yup
             .string()
             .email(t('Please enter a valid email address'))
-            .required(t('You must specify an email address')),
-        password: yup.string().min(6, t('Password must be at least 6 characters')),
-        passwordAgain: yup
-            .string()
-            .oneOf([yup.ref('password'), null], t('The passwords you have entered do not match'))
+            .required(t('You must specify an email address'))
     });
 
     return (
@@ -146,8 +138,6 @@ const Profile: React.FC<ProfileProps> = props => {
                 const submitValues: NewProfileDetails = {
                     avatar: values.avatar ? await toBase64(values.avatar) : null,
                     email: values.email,
-                    password: values.password,
-                    passwordAgain: values.passwordAgain,
                     settings: values.settings,
                     customData: JSON.stringify(values.gameOptions)
                 };

@@ -24,3 +24,5 @@ export const Constants = {
 };
 
 export const PatreonClientId = 'HjDP9KKd-HscTXXMs_2TNl2h_POjaEw7D-EkLv_ShRbarVO_WuKA0LWRBp9LRdLq';
+
+export const AuthServerUrl = 'https://localhost:7001';

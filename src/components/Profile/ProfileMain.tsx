@@ -7,7 +7,7 @@ import Avatar from '../../components/Site/Avatar';
 import { FormikProps } from 'formik';
 import { User, PatreonStatus } from '../../redux/types';
 import { ExistingProfileDetails } from '../../pages/components/Profile';
-import { PatreonClientId } from '../../constants';
+import { PatreonClientId, AuthServerUrl } from '../../constants';
 
 import './ProfileMain.scss';
 
@@ -37,21 +37,16 @@ const ProfileMain: React.FC<ProfileMainProps> = props => {
     return (
         <Panel title={t('Profile')}>
             <Form.Row>
-                <Form.Group as={Col} md='6' controlId='formGridEmail'>
-                    <Form.Label>{t('Email')}</Form.Label>
-                    <Form.Control
-                        name='email'
-                        type='text'
-                        placeholder={t('Enter an email address')}
-                        value={formProps.values.email}
-                        onChange={formProps.handleChange}
-                        onBlur={formProps.handleBlur}
-                        isInvalid={formProps.touched.email && !!formProps.errors.email}
-                    />
-                    <Form.Control.Feedback type='invalid'>
-                        {formProps.errors.email}
-                    </Form.Control.Feedback>
+                <Form.Group as={Col} md='6'>
+                    <Form.Label>Email</Form.Label>
+                    <div>{user ? user.email : ''}</div>
                 </Form.Group>
+                <Col md={6}>
+                    Account details need to be updated on the{' '}
+                    <a href={AuthServerUrl}>Gameteki site</a>.
+                </Col>
+            </Form.Row>
+            <Form.Row>
                 <Form.Group as={Col} md='3'>
                     <Form.Label>{t('Avatar')}</Form.Label>
                     <div>
@@ -110,40 +105,6 @@ const ProfileMain: React.FC<ProfileMainProps> = props => {
                             <Button variant='secondary'>Unlink Account</Button>
                         )}
                     </div>
-                </Form.Group>
-            </Form.Row>
-            <Form.Row>
-                <Form.Group as={Col} md='6' controlId='formGridPassword'>
-                    <Form.Label>{t('Password')}</Form.Label>
-                    <Form.Control
-                        name='password'
-                        type='password'
-                        placeholder={t('Enter a password')}
-                        value={formProps.values.password}
-                        onChange={formProps.handleChange}
-                        onBlur={formProps.handleBlur}
-                        isInvalid={formProps.touched.password && !!formProps.errors.password}
-                    />
-                    <Form.Control.Feedback type='invalid'>
-                        {formProps.errors.password}
-                    </Form.Control.Feedback>
-                </Form.Group>
-                <Form.Group as={Col} md='6' controlId='formGridPassword1'>
-                    <Form.Label>{t('Password (again)')}</Form.Label>
-                    <Form.Control
-                        name='passwordAgain'
-                        type='password'
-                        placeholder={t('Enter the same password')}
-                        value={formProps.values.passwordAgain}
-                        onChange={formProps.handleChange}
-                        onBlur={formProps.handleBlur}
-                        isInvalid={
-                            formProps.touched.passwordAgain && !!formProps.errors.passwordAgain
-                        }
-                    />
-                    <Form.Control.Feedback type='invalid'>
-                        {formProps.errors.passwordAgain}
-                    </Form.Control.Feedback>
                 </Form.Group>
             </Form.Row>
         </Panel>
