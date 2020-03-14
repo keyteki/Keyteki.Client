@@ -1,7 +1,5 @@
 import React from 'react';
 
-import Login from './pages/containers/Login';
-import Register from './pages/containers/Register';
 import Lobby from './pages/Lobby';
 import Profile from './pages/containers/Profile';
 import Patreon from './pages/Patreon';
@@ -23,10 +21,8 @@ export interface RouteEntry {
 const routes: RouteEntry[] = [
     { path: '/', component: Lobby, exact: true },
     { path: '/callback', component: Callback },
-    { path: '/login', component: Login },
     { path: '/patreon', component: Patreon },
     { path: '/profile', component: Profile },
-    { path: '/register', component: Register },
     { path: '/blocklist', component: Blocklist },
     { path: '/logout', component: Logout }
 ];

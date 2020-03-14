@@ -3,9 +3,8 @@ import { Dispatch, MiddlewareAPI, Middleware, AnyAction, Action } from 'redux';
 import i18n from 'i18next';
 
 import { ApiActionType, Auth } from '../types';
-import { authenticate, retryRequest, clearFailedRequests } from '../actions';
+import { retryRequest, clearFailedRequests } from '../actions';
 import { RootState } from '../store';
-import userManager from '../../userManager';
 
 export interface ApiCallAction extends Action {
     types: [string, string];
@@ -58,7 +57,8 @@ export const callApiMiddleware: Middleware<Dispatch> = ({
         if (!user) {
             console.info('no user');
 
-            //  userManager.signinRedirect();
+            dispatch(retryRequest(action));
+
             return next(action);
         }
 
@@ -66,38 +66,17 @@ export const callApiMiddleware: Middleware<Dispatch> = ({
     }
 
     let response;
-    const errorStatus = 200;
+    let errorStatus = 200;
 
     try {
         response = await axios(params);
     } catch (error) {
         const axiosError = error as AxiosError;
 
-        console.info('error happened in api call');
-
-        // if (axiosError && axiosError.response) {
-        //     response = axiosError.response;
-        //     if (response.status === 401) {
-        //         if (skipAuth) {
-        //             return dispatch({
-        //                 status: 401,
-        //                 type: ApiActionType.ApiFailure,
-        //                 request: requestType
-        //             });
-        //         }
-
-        //         if (!state.auth.refreshToken) {
-        //             return next(action);
-        //         }
-
-        //         dispatch(retryRequest(action));
-
-        //         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        //         return dispatch<any>(authenticate());
-        //     } else {
-        //         errorStatus = response.status;
-        //     }
-        // }
+        response = axiosError.response;
+        if (response) {
+            errorStatus = response.status;
+        }
     }
 
     const status = response ? response.status : errorStatus;
@@ -121,17 +100,17 @@ export const callApiMiddleware: Middleware<Dispatch> = ({
         type: successType
     });
 
-    // if (successType === Auth.AuthTokenReceived) {
-    //     const failedRequests = state.api.failedQueue;
+    if (successType === Auth.AuthChecked) {
+        const failedRequests = state.api.failedQueue;
 
-    //     if (failedRequests.length > 0) {
-    //         for (const request of failedRequests) {
-    //             dispatch(request);
-    //         }
+        if (failedRequests.length > 0) {
+            for (const request of failedRequests) {
+                dispatch(request);
+            }
 
-    //         dispatch(clearFailedRequests());
-    //     }
-    // }
+            dispatch(clearFailedRequests());
+        }
+    }
 
     return dispatch({
         type: ApiActionType.ApiLoaded,

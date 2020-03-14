@@ -28,11 +28,17 @@ const ProfileMenu: React.FC<ProfileMenuProps> = props => {
 
     return (
         <NavDropdown title={title} id='nav-dropdown'>
-            {props.menu.map(menuItem => (
-                <LinkContainer key={menuItem.path} to={menuItem.path}>
-                    <NavDropdown.Item>{t(menuItem.title)}</NavDropdown.Item>
-                </LinkContainer>
-            ))}
+            {props.menu.map(menuItem => {
+                if (!menuItem.path) {
+                    return null;
+                }
+
+                return (
+                    <LinkContainer key={menuItem.path} to={menuItem.path}>
+                        <NavDropdown.Item>{t(menuItem.title)}</NavDropdown.Item>
+                    </LinkContainer>
+                );
+            })}
         </NavDropdown>
     );
 };

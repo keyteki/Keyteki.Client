@@ -5,18 +5,12 @@ interface LoginResponse {
     user: User;
 }
 
-const initialState: AuthState = { registered: false, sessions: [], blocklist: [] };
+const initialState: AuthState = { sessions: [], blocklist: [] };
 
 export default function(state = initialState, action: AuthAction): AuthState {
     let response: LoginResponse;
 
     switch (action.type) {
-        case Auth.AccountRegistered:
-            return {
-                ...state,
-                registered: true
-            };
-        case Auth.AccountLoggedIn:
         case Auth.AuthTokenReceived:
             response = action.response?.data;
 

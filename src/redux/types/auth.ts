@@ -2,26 +2,11 @@ import { Action } from 'redux';
 import { ApiCallAction } from '../middleware/apiMiddleware';
 import { ApiResponseAction } from './api';
 
-export type RegisterUser = {
-    username: string;
-    password: string;
-    email: string;
-};
-
-export type LoginDetails = {
-    username: string;
-    password: string;
-};
-
 export type UpdateProfileDetails = {
     email: string;
 };
 
 export enum Auth {
-    RegisterAccount = 'REGISTER_ACCOUNT',
-    AccountRegistered = 'ACCOUNT_REGISTERED',
-    LoginAccount = 'LOGIN_ACCOUNT',
-    AccountLoggedIn = 'ACCOUNT_LOGGED_IN',
     SetAuthTokens = 'SET_AUTH_TOKENS',
     CheckAuth = 'CHECK_AUTH',
     AuthChecked = 'AUTH_CHECKED',
@@ -73,20 +58,11 @@ export interface Session {
 }
 
 export type AuthState = {
-    registered: boolean;
     token?: string;
     user?: User;
     sessions: Session[];
     blocklist: string[];
 };
-
-export interface RegisterUserAction extends ApiCallAction, ApiResponseAction {
-    type: typeof Auth.AccountRegistered;
-}
-
-export interface LoginUserAction extends ApiCallAction, ApiResponseAction {
-    type: typeof Auth.AccountLoggedIn;
-}
 
 export interface SetAuthTokenAction extends Action {
     type: typeof Auth.SetAuthTokens;
@@ -136,8 +112,6 @@ export interface LogoutAccountAction extends ApiCallAction, ApiResponseAction {
 export type AuthAction =
     | SetAuthTokenAction
     | CheckAuthAction
-    | RegisterUserAction
-    | LoginUserAction
     | AuthenticateAction
     | UpdateProfileAction
     | LinkPatreonAction

@@ -1,10 +1,10 @@
 import React from 'react';
-import { Navbar, Nav } from 'react-bootstrap';
+import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { LinkContainer } from 'react-router-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import { RightMenu, ProfileMenu } from '../../menus';
+import { RightMenu, ProfileMenu, MenuItem, LeftMenu } from '../../menus';
 import LanguageSelector from './LanguageSelector';
 import ProfileDropdown from './ProfileMenu';
 import { User } from '../../redux/types';
@@ -18,19 +18,58 @@ type NavigationProps = {
 
 const Navigation: React.FC<NavigationProps> = (props: NavigationProps) => {
     const { t } = useTranslation('navigation');
-    const rightMenuItems: JSX.Element[] = [];
 
-    for (const menuItem of RightMenu) {
-        if (props.user && menuItem.showOnlyWhenLoggedOut) {
-            continue;
+    const filterMenuItems = (menuItems: MenuItem[], user?: User): MenuItem[] => {
+        const returnedItems = [];
+
+        for (const menuItem of menuItems) {
+            if (user && menuItem.showOnlyWhenLoggedOut) {
+                continue;
+            }
+
+            if (!user && menuItem.showOnlyWhenLoggedIn) {
+                continue;
+            }
+
+            returnedItems.push(menuItem);
         }
 
-        rightMenuItems.push(
-            <LinkContainer key={menuItem.path} to={menuItem.path}>
-                <Nav.Link>{t(menuItem.title)}</Nav.Link>
-            </LinkContainer>
+        return returnedItems;
+    };
+
+    const renderMenuItems = (menuItems: MenuItem[]): JSX.Element[] => {
+        return filterMenuItems(menuItems, props.user).map(
+            (menuItem: MenuItem): JSX.Element => {
+                if (menuItem.children) {
+                    return (
+                        <NavDropdown title={menuItem.title} id={`nav-${menuItem.title}`}>
+                            {menuItem.children.map(menuItem => {
+                                if (!menuItem.path) {
+                                    return <></>;
+                                }
+
+                                return (
+                                    <LinkContainer key={menuItem.path} to={menuItem.path}>
+                                        <NavDropdown.Item>{t(menuItem.title)}</NavDropdown.Item>
+                                    </LinkContainer>
+                                );
+                            })}
+                        </NavDropdown>
+                    );
+                }
+
+                if (!menuItem.path) {
+                    return <></>;
+                }
+
+                return (
+                    <LinkContainer key={menuItem.path || menuItem.title} to={menuItem.path}>
+                        <Nav.Link>{t(menuItem.title)}</Nav.Link>
+                    </LinkContainer>
+                );
+            }
         );
-    }
+    };
 
     return (
         <Navbar bg='dark' variant='dark'>
@@ -38,9 +77,10 @@ const Navigation: React.FC<NavigationProps> = (props: NavigationProps) => {
                 <Link to='/'>{props.appName || 'Gameteki Application'}</Link>
             </Navbar.Brand>
             <Navbar.Toggle aria-controls='navbar' />
+            <Nav>{renderMenuItems(LeftMenu)}</Nav>
             <Navbar.Collapse id='navbar' className='justify-content-end'>
                 <Nav className='ml-auto pr-md-5'>
-                    {rightMenuItems}
+                    {renderMenuItems(RightMenu)}
                     <ProfileDropdown menu={ProfileMenu} user={props.user} />
                     <LanguageSelector />
                 </Nav>

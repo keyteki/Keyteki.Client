@@ -31,7 +31,6 @@ const initialState: ApplicationState = {
     },
     auth: {
         blocklist: [],
-        registered: false,
         sessions: []
     },
     init: {

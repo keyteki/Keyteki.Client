@@ -2,9 +2,7 @@ import { ThunkAction } from 'redux-thunk';
 import { Action } from 'redux';
 
 import {
-    RegisterUser,
     Auth,
-    LoginDetails,
     AuthAction,
     UpdateProfileDetails,
     RequestSessionsAction,
@@ -15,6 +13,7 @@ import {
     LogoutAccountAction
 } from '../types';
 import { RootState } from '../store';
+import userManager from '../../userManager';
 
 export function authenticate(): AuthAction {
     return {
@@ -24,41 +23,6 @@ export function authenticate(): AuthAction {
         apiParams: {
             url: '/api/account/token',
             method: 'post'
-        }
-    };
-}
-
-export function registerAccount(user: RegisterUser): AuthAction {
-    return {
-        type: Auth.AccountRegistered,
-        types: [Auth.RegisterAccount, Auth.AccountRegistered],
-        shouldCallApi: (): boolean => true,
-        skipAuth: true,
-        apiParams: {
-            url: '/api/account/register',
-            method: 'post',
-            data: {
-                username: user.username,
-                email: user.email,
-                password: user.password
-            }
-        }
-    };
-}
-
-export function loginAccount(user: LoginDetails): AuthAction {
-    return {
-        type: Auth.AccountLoggedIn,
-        types: [Auth.LoginAccount, Auth.AccountLoggedIn],
-        shouldCallApi: (): boolean => true,
-        skipAuth: true,
-        apiParams: {
-            url: '/api/account/login',
-            method: 'post',
-            data: {
-                username: user.username,
-                password: user.password
-            }
         }
     };
 }
@@ -174,21 +138,10 @@ export function addBlocklistEntry(entry: string): AddBlocklistEntryAction {
     };
 }
 
-export function logoutAccount(): ThunkAction<void, RootState, void, LogoutAccountAction> {
-    return (
-        dispatch: (action: AuthAction) => LogoutAccountAction,
-        getState: () => RootState
-    ): LogoutAccountAction => {
-        const state = getState();
+export function logoutAccount(): Action {
+    userManager.signoutRedirect();
 
-        return dispatch({
-            type: Auth.AccountLoggedOut,
-            types: [Auth.LogoutAccount, Auth.AccountLoggedOut],
-            shouldCallApi: (): boolean => true,
-            apiParams: {
-                url: '/api/account/logout',
-                method: 'POST'
-            }
-        });
+    return {
+        type: Auth.LogoutAccount
     };
 }

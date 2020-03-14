@@ -8,14 +8,14 @@ export const oidcMiddleware: Middleware<Dispatch> = ({
     getState
 }: MiddlewareAPI) => next => async (action: AnyAction): Promise<{}> => {
     if (action.type === USER_FOUND) {
-        console.info('user found');
         next(action);
+
         return dispatch(checkAuth());
     } else if (action.type === USER_EXPIRED) {
         if (window.location.pathname === '/callback') {
             return next(action);
         }
-        console.info('User expired');
+
         userManager.signinRedirect();
     }
 
