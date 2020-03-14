@@ -6,6 +6,7 @@ import Patreon from './pages/Patreon';
 import Blocklist from './pages/containers/Blocklist';
 import Logout from './pages/components/Logout';
 import Callback from './pages/Callback';
+import NewsAdmin from './pages/containers/NewsAdmin';
 
 export interface RoutedProps {
     routes?: RouteEntry[];
@@ -20,11 +21,12 @@ export interface RouteEntry {
 
 const routes: RouteEntry[] = [
     { path: '/', component: Lobby, exact: true },
-    { path: '/callback', component: Callback },
-    { path: '/patreon', component: Patreon },
-    { path: '/profile', component: Profile },
+    { path: '/admin/news', component: NewsAdmin },
     { path: '/blocklist', component: Blocklist },
-    { path: '/logout', component: Logout }
+    { path: '/callback', component: Callback },
+    { path: '/logout', component: Logout },
+    { path: '/patreon', component: Patreon },
+    { path: '/profile', component: Profile }
 ];
 
 export default routes;
