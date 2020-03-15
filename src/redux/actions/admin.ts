@@ -1,10 +1,12 @@
-export function getAdminNews(): RequestBlocklistAction {
+import { Admin, RequestNewsAction } from '../types';
+
+export function getAdminNews(): RequestNewsAction {
     return {
-        type: Auth.BlocklistReceived,
-        types: [Auth.RequestBlocklist, Auth.BlocklistReceived],
+        type: Admin.NewsLoaded,
+        types: [Admin.LoadNews, Admin.NewsLoaded],
         shouldCallApi: (): boolean => true,
         apiParams: {
-            url: '/api/account/blocklist',
+            url: '/api/news/admin',
             method: 'GET'
         }
     };

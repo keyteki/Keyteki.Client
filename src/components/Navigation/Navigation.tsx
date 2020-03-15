@@ -42,7 +42,11 @@ const Navigation: React.FC<NavigationProps> = (props: NavigationProps) => {
             (menuItem: MenuItem): JSX.Element => {
                 if (menuItem.children) {
                     return (
-                        <NavDropdown title={menuItem.title} id={`nav-${menuItem.title}`}>
+                        <NavDropdown
+                            key={menuItem.title}
+                            title={menuItem.title}
+                            id={`nav-${menuItem.title}`}
+                        >
                             {menuItem.children.map(menuItem => {
                                 if (!menuItem.path) {
                                     return <></>;
