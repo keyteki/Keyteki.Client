@@ -5,17 +5,14 @@ import { Switch, Route } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import ReduxToastr from 'react-redux-toastr';
 import { useTranslation } from 'react-i18next';
-import { ConnectedRouter, RouterState } from 'connected-react-router';
+import { ConnectedRouter } from 'connected-react-router';
 
 import routes, { RouteEntry } from './routes';
 import { RootState, history } from './redux/store';
 import { AuthState, InitState } from './redux/types';
-import { setInitLoading, checkAuth } from './redux/actions';
-import Loader from './components/Site/Loader';
-import userManager from './userManager';
+import { setInitLoading } from './redux/actions';
 
 import './styles/bootstrap.scss';
-import { UserState } from 'redux-oidc';
 
 const App: React.FC = () => {
     const { t } = useTranslation();

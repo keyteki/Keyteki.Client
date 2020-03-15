@@ -6,8 +6,9 @@ import { loadUser } from 'redux-oidc';
 import { createBrowserHistory } from 'history';
 import { routerMiddleware } from 'connected-react-router';
 
+import { InitialState } from './initialState';
 import userManager from '../userManager';
-import createRootReducer, { ApplicationState } from './reducers';
+import createRootReducer from './reducers';
 
 declare global {
     interface Window {
@@ -23,34 +24,7 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const enhancer = composeEnhancers(
     applyMiddleware(thunk, callApiMiddleware, oidcMiddleware, routerMiddleware(history))
 );
-
-const initialState: ApplicationState = {
-    api: {
-        failedQueue: [],
-        requests: {}
-    },
-    auth: {
-        blocklist: [],
-        sessions: []
-    },
-    init: {
-        finished: false,
-        loading: false
-    },
-    oidc: {
-        isLoadingUser: false,
-        user: undefined
-    },
-    router: {
-        action: 'PUSH',
-        location: { pathname: '', search: '', hash: '', state: undefined }
-    },
-    toastr: {
-        confirm: undefined,
-        toastrs: []
-    }
-};
-const store = createStore(rootReducer, initialState, enhancer);
+const store = createStore(rootReducer, InitialState, enhancer);
 
 loadUser(store, userManager);
 

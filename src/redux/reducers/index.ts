@@ -7,9 +7,11 @@ import { History, LocationState } from 'history';
 import api, { ApiState } from './api';
 import auth from './auth';
 import init from './init';
-import { AuthState, InitState } from '../types';
+import admin from './admin';
+import { AuthState, InitState, AdminState } from '../types';
 
 export interface ApplicationState {
+    admin: AdminState;
     api: ApiState;
     auth: AuthState;
     init: InitState;
@@ -20,6 +22,7 @@ export interface ApplicationState {
 
 const createRootReducer = (history: History<LocationState>): Reducer<ApplicationState> =>
     combineReducers({
+        admin,
         api,
         auth,
         init,

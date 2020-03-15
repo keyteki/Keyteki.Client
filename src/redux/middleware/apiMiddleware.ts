@@ -55,8 +55,6 @@ export const callApiMiddleware: Middleware<Dispatch> = ({
     if (!skipAuth) {
         const user = state.oidc.user;
         if (!user) {
-            console.info('no user');
-
             dispatch(retryRequest(action));
 
             return next(action);

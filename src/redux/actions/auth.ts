@@ -1,4 +1,3 @@
-import { ThunkAction } from 'redux-thunk';
 import { Action } from 'redux';
 
 import {
@@ -9,10 +8,8 @@ import {
     RemoveSessionAction,
     RequestBlocklistAction,
     RemoveBlocklistEntryAction,
-    AddBlocklistEntryAction,
-    LogoutAccountAction
+    AddBlocklistEntryAction
 } from '../types';
-import { RootState } from '../store';
 import userManager from '../../userManager';
 
 export function authenticate(): AuthAction {

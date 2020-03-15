@@ -20,7 +20,7 @@ const Logout: React.FC = () => {
         if (authState?.user) {
             dispatch(logoutAccount());
         }
-    }, [dispatch]);
+    }, [dispatch, authState]);
 
     return apiState && apiState.message ? (
         <ApiStatus

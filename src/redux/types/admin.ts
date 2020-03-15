@@ -2,8 +2,12 @@ import { ApiCallAction } from '../middleware/apiMiddleware';
 import { ApiResponseAction } from '.';
 
 export enum Admin {
-    LoadNews = 'LOAD_NEWS',
-    NewsLoaded = 'NEWS_LOADED'
+    RequestNews = 'REQUEST_NEWS',
+    NewsRecevied = 'NEWS_RECEIVED',
+    AddNewsItem = 'ADD_NEWSITEM',
+    NewsItemAdded = 'NEWSITEM_ADDED',
+    RemoveNewsItem = 'REMOVE_NEWSITEM',
+    NewsItemRemoved = 'NEWSITEM_REMOVED'
 }
 
 export type AdminState = {
@@ -19,5 +23,15 @@ export interface NewsItem {
 }
 
 export interface RequestNewsAction extends ApiCallAction, ApiResponseAction {
-    type: typeof Admin.NewsLoaded;
+    type: typeof Admin.NewsRecevied;
 }
+
+export interface AddNewsItemAction extends ApiCallAction, ApiResponseAction {
+    type: typeof Admin.NewsItemAdded;
+}
+
+export interface RemoveNewsItemAction extends ApiCallAction, ApiResponseAction {
+    type: typeof Admin.NewsItemRemoved;
+}
+
+export type AdminAction = RequestNewsAction | AddNewsItemAction;
