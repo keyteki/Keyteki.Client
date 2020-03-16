@@ -43,7 +43,7 @@ const NewsAdminContainer: React.FC = () => {
     }
 
     return (
-        <Col lg={{ span: 10, offset: 1 }}>
+        <Col lg={12}>
             <Panel title={t('News Admin')}>
                 <ApiStatus
                     state={removeState}

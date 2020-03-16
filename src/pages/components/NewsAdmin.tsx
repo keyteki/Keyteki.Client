@@ -2,6 +2,7 @@ import React, { ReactElement } from 'react';
 import { useTranslation } from 'react-i18next';
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
+import cellEditFactory from 'react-bootstrap-table2-editor';
 import moment from 'moment';
 import * as yup from 'yup';
 
@@ -32,12 +33,22 @@ const Blocklist: React.FC<NewsAdminProps> = props => {
             dataField: 'datePublished',
             text: t('Date Posted'),
             sort: true,
+            editable: false,
             formatter: (cell: string): string => moment(cell).format('YYYY-MM-DD HH:mm')
         },
-        { dataField: 'poster', text: t('Poster'), sort: true },
-        { dataField: 'text', text: t('Text'), sort: true },
+        { dataField: 'poster', text: t('Poster'), sort: true, editable: false },
+        {
+            dataField: 'newsText',
+            text: t('Text'),
+            sort: true,
+            editable: true,
+            editor: {
+                type: 'textarea'
+            }
+        },
         {
             dataField: 'none',
+            editable: false,
             text: t('Remove'),
             isDummyField: true,
             // eslint-disable-next-line @typescript-eslint/no-unused-vars, react/display-name
@@ -62,6 +73,7 @@ const Blocklist: React.FC<NewsAdminProps> = props => {
                 data={news}
                 columns={columns}
                 pagination={paginationFactory()}
+                cellEdit={cellEditFactory({ mode: 'click' })}
                 defaultSorted={[{ dataField: 'datePublished', order: 'desc' }]}
             />
         );
