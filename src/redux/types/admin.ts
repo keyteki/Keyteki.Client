@@ -7,7 +7,9 @@ export enum Admin {
     AddNewsItem = 'ADD_NEWSITEM',
     NewsItemAdded = 'NEWSITEM_ADDED',
     RemoveNewsItem = 'REMOVE_NEWSITEM',
-    NewsItemRemoved = 'NEWSITEM_REMOVED'
+    NewsItemRemoved = 'NEWSITEM_REMOVED',
+    UpdateNewsItem = 'UPDATE_NEWSITEM',
+    NewsItemUpdated = 'NEWSITEM_UPDATED'
 }
 
 export type AdminState = {
@@ -18,7 +20,7 @@ export interface NewsItem {
     id: number;
     datePublished: Date;
     posterId: number;
-    text: string;
+    newsText: string;
     poster: string;
 }
 
@@ -34,4 +36,8 @@ export interface RemoveNewsItemAction extends ApiCallAction, ApiResponseAction {
     type: typeof Admin.NewsItemRemoved;
 }
 
-export type AdminAction = RequestNewsAction | AddNewsItemAction;
+export interface UpdateNewsItemAction extends ApiCallAction, ApiResponseAction {
+    type: typeof Admin.NewsItemUpdated;
+}
+
+export type AdminAction = RequestNewsAction | AddNewsItemAction | UpdateNewsItemAction;

@@ -3,7 +3,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { Col } from 'react-bootstrap';
 
-import { getAdminNews, addNewsItem, removeNewsItem } from '../../redux/actions/admin';
+import {
+    getAdminNews,
+    addNewsItem,
+    removeNewsItem,
+    updateNewsItem
+} from '../../redux/actions/admin';
 import { RootState } from '../../redux/store';
 import {
     ApiResponseState,
@@ -11,7 +16,8 @@ import {
     AdminState,
     AddNewsItemAction,
     ClearApiStatusAction,
-    RemoveNewsItemAction
+    RemoveNewsItemAction,
+    UpdateNewsItemAction
 } from '../../redux/types';
 import Loader from '../../components/Site/Loader';
 import Panel from '../../components/Site/Panel';
@@ -62,6 +68,9 @@ const NewsAdminContainer: React.FC = () => {
                     news={adminState!.news || []}
                     onRemoveNewsItem={(id: number): RemoveNewsItemAction =>
                         dispatch(removeNewsItem(id))
+                    }
+                    onUpdateNewsItem={(id: number, text: string): UpdateNewsItemAction =>
+                        dispatch(updateNewsItem(id, text))
                     }
                     onSubmit={(values): AddNewsItemAction => dispatch(addNewsItem(values.text))}
                 />

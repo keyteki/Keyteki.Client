@@ -13,6 +13,7 @@ import { Form, Col, Button } from 'react-bootstrap';
 type NewsAdminProps = {
     news: NewsItem[];
     onRemoveNewsItem: (id: number) => void;
+    onUpdateNewsItem: (id: number, text: string) => void;
     onSubmit: (values: NewsDetails) => void;
 };
 
@@ -26,7 +27,7 @@ const initialValues = {
 
 const Blocklist: React.FC<NewsAdminProps> = props => {
     const { t } = useTranslation('newsadmin');
-    const { news, onRemoveNewsItem } = props;
+    const { news, onRemoveNewsItem, onUpdateNewsItem } = props;
 
     const columns = [
         {
@@ -62,6 +63,17 @@ const Blocklist: React.FC<NewsAdminProps> = props => {
         }
     ];
 
+    const cellEdit = cellEditFactory({
+        mode: 'click',
+        blurToSave: true,
+        afterSaveCell: (oldValue, newValue, row, column) => {
+            if (oldValue !== newValue) {
+                onUpdateNewsItem(row.id, newValue);
+                console.info(row, newValue);
+            }
+        }
+    });
+
     const table =
         news.length === 0 ? (
             <div className='text-center'>{t('There is currently no news.')}</div>
@@ -69,11 +81,11 @@ const Blocklist: React.FC<NewsAdminProps> = props => {
             <BootstrapTable
                 bootstrap4
                 striped
-                keyField='text'
+                keyField='id'
                 data={news}
                 columns={columns}
                 pagination={paginationFactory()}
-                cellEdit={cellEditFactory({ mode: 'click' })}
+                cellEdit={cellEdit}
                 defaultSorted={[{ dataField: 'datePublished', order: 'desc' }]}
             />
         );

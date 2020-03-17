@@ -1,4 +1,10 @@
-import { Admin, RequestNewsAction, AddNewsItemAction, RemoveNewsItemAction } from '../types';
+import {
+    Admin,
+    RequestNewsAction,
+    AddNewsItemAction,
+    RemoveNewsItemAction,
+    UpdateNewsItemAction
+} from '../types';
 
 export function getAdminNews(): RequestNewsAction {
     return {
@@ -35,6 +41,21 @@ export function removeNewsItem(id: number): RemoveNewsItemAction {
         apiParams: {
             url: `/api/news/${id}`,
             method: 'DELETE'
+        }
+    };
+}
+
+export function updateNewsItem(id: number, text: string): UpdateNewsItemAction {
+    return {
+        type: Admin.NewsItemUpdated,
+        types: [Admin.UpdateNewsItem, Admin.NewsItemUpdated],
+        shouldCallApi: (): boolean => true,
+        apiParams: {
+            url: `/api/news/${id}`,
+            method: 'PUT',
+            data: {
+                text: text
+            }
         }
     };
 }

@@ -92,6 +92,7 @@ interface CellEdit<Props extends CellEditProps = CellEditProps> {
 
 interface CellEditProps {
     mode?: 'string' | TODO;
+    blurToSave: boolean;
     beforeSaveCell?: (oldValue: TODO, newValue: TODO, row: TODO, column: TODO) => TODO;
     afterSaveCell?: (oldValue: TODO, newValue: TODO, row: TODO, column: TODO) => TODO;
     onStartEdit?: (row: TODO, column: TODO, rowIndex: TODO, columnIndex: TODO) => TODO;
