@@ -19,6 +19,10 @@ type NavigationProps = {
 const Navigation: React.FC<NavigationProps> = (props: NavigationProps) => {
     const { t } = useTranslation('navigation');
 
+    const userCanSeeMenu = (menuItem: MenuItem, user?: User): boolean => {
+        return !!menuItem.permission && (!user || !user.permissions[menuItem.permission]);
+    };
+
     const filterMenuItems = (menuItems: MenuItem[], user?: User): MenuItem[] => {
         const returnedItems = [];
 
@@ -28,6 +32,10 @@ const Navigation: React.FC<NavigationProps> = (props: NavigationProps) => {
             }
 
             if (!user && menuItem.showOnlyWhenLoggedIn) {
+                continue;
+            }
+
+            if (!userCanSeeMenu(menuItem, user)) {
                 continue;
             }
 
@@ -49,6 +57,10 @@ const Navigation: React.FC<NavigationProps> = (props: NavigationProps) => {
                         >
                             {menuItem.children.map(menuItem => {
                                 if (!menuItem.path) {
+                                    return <></>;
+                                }
+
+                                if (!userCanSeeMenu(menuItem, props.user)) {
                                     return <></>;
                                 }
 

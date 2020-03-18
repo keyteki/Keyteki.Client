@@ -42,6 +42,17 @@ export interface Settings {
     windowTimer: number;
 }
 
+export type GametekiPermission =
+    | 'canManageUsers'
+    | 'canEditNews'
+    | 'canManagePermissions'
+    | 'canManageGames'
+    | 'canManageNodes'
+    | 'canModerateChat'
+    | 'isSupporter'
+    | 'isContributor'
+    | 'isAdmin';
+
 export interface User {
     id: string;
     username: string;
@@ -49,6 +60,7 @@ export interface User {
     customData: string;
     settings: Settings;
     patreonStatus: PatreonStatus;
+    permissions: { [GametekiPermissions: string]: boolean };
 }
 
 export interface Session {

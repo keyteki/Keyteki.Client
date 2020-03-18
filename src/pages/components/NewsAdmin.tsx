@@ -66,10 +66,9 @@ const Blocklist: React.FC<NewsAdminProps> = props => {
     const cellEdit = cellEditFactory({
         mode: 'click',
         blurToSave: true,
-        afterSaveCell: (oldValue, newValue, row, column) => {
+        afterSaveCell: (oldValue, newValue, row) => {
             if (oldValue !== newValue) {
                 onUpdateNewsItem(row.id, newValue);
-                console.info(row, newValue);
             }
         }
     });
