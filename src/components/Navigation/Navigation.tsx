@@ -20,7 +20,7 @@ const Navigation: React.FC<NavigationProps> = (props: NavigationProps) => {
     const { t } = useTranslation('navigation');
 
     const userCanSeeMenu = (menuItem: MenuItem, user?: User): boolean => {
-        return !!menuItem.permission && (!user || !user.permissions[menuItem.permission]);
+        return !menuItem.permission || (!!user && user.permissions[menuItem.permission]);
     };
 
     const filterMenuItems = (menuItems: MenuItem[], user?: User): MenuItem[] => {
@@ -48,19 +48,17 @@ const Navigation: React.FC<NavigationProps> = (props: NavigationProps) => {
     const renderMenuItems = (menuItems: MenuItem[]): JSX.Element[] => {
         return filterMenuItems(menuItems, props.user).map(
             (menuItem: MenuItem): JSX.Element => {
-                if (menuItem.children) {
+                const children =
+                    menuItem.children && filterMenuItems(menuItem.children, props.user);
+                if (children && children.length > 0) {
                     return (
                         <NavDropdown
                             key={menuItem.title}
                             title={menuItem.title}
                             id={`nav-${menuItem.title}`}
                         >
-                            {menuItem.children.map(menuItem => {
+                            {children.map(menuItem => {
                                 if (!menuItem.path) {
-                                    return <></>;
-                                }
-
-                                if (!userCanSeeMenu(menuItem, props.user)) {
                                     return <></>;
                                 }
 
